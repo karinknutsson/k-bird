@@ -1,19 +1,6 @@
-import * as THREE from "three";
+import Cube from "./Cube";
 
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const cubeMaterial = new THREE.MeshStandardMaterial({ color: "#8080FF" });
 const cubeSize = 0.5;
-
-export function Cube({ position }) {
-  return (
-    <mesh
-      geometry={boxGeometry}
-      material={cubeMaterial}
-      scale={[cubeSize, cubeSize, cubeSize]}
-      position={position}
-    ></mesh>
-  );
-}
 
 function getCubeRing(level) {
   const cubes = [];
@@ -39,7 +26,11 @@ export function CubeLevel({ level }) {
     <group position={[0, -level * cubeSize, 0]}>
       {positions.map((p, index) => {
         return (
-          <Cube key={index} position={[p[0] * cubeSize, 0, p[2] * cubeSize]} />
+          <Cube
+            key={index}
+            size={cubeSize}
+            position={[p[0] * cubeSize, 0, p[2] * cubeSize]}
+          />
         );
       })}
     </group>
