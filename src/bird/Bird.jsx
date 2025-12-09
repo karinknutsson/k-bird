@@ -1,4 +1,12 @@
+import {
+  ConeCollider,
+  CylinderCollider,
+  CuboidCollider,
+  RigidBody,
+} from "@react-three/rapier";
 import * as THREE from "three";
+import { useKeyboardControls } from "@react-three/drei";
+import { useEffect, useRef } from "react";
 
 const sphereGeometry = new THREE.IcosahedronGeometry(1, 30);
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
@@ -18,115 +26,143 @@ bottomFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.3);
 bottomFeatherGeometry.applyMatrix4(bottomFeatherMatrix);
 
 export default function Bird({ position, rotation }) {
+  const bird = useRef();
+  const [subscribeKeys, getKeys] = useKeyboardControls();
+
+  const jump = () => {
+    console.log("jump");
+    bird.current.applyImpulse({ x: 0, y: 0.5, z: 0.15 });
+  };
+
+  useEffect(() => {
+    const unsubscribeJump = subscribeKeys(
+      (state) => state.jump,
+      (value) => {
+        if (value) jump();
+      }
+    );
+    return () => {
+      unsubscribeJump();
+    };
+  }, []);
+
   return (
-    <group position={position} rotation={rotation} scale={0.2}>
-      {/* Body*/}
-      <mesh
-        geometry={sphereGeometry}
-        material={birdMaterial}
-        scale={[1, 0.85, 0.85]}
-      />
-
-      {/* Eyes */}
-      <group position={[0, 0.4, 0.78]}>
+    <RigidBody ref={bird} colliders={false}>
+      {/* <CuboidCollider
+        position={position}
+        rotation={rotation}
+        args={[0.2, 0.36, 0.2]}
+      /> */}
+      <ConeCollider position={position} args={[0.36, 0.2]} mass={0.2} />
+      <group position={position} rotation={rotation} scale={0.2}>
+        {/* Body*/}
         <mesh
           geometry={sphereGeometry}
-          material={eyeMaterial}
-          position={[0.3, 0, 0]}
-          scale={[0.11, 0.11, 0.11]}
-        />
-        <mesh
-          geometry={sphereGeometry}
-          material={eyeMaterial}
-          position={[-0.3, 0, 0]}
-          scale={[0.11, 0.11, 0.11]}
-        />
-      </group>
-
-      {/* Beek */}
-      <mesh
-        geometry={coneGeometry}
-        material={detailMaterial}
-        position={[0, -0.3, 1.26]}
-        scale={[0.4, 1.2, 0.4]}
-        rotation={[Math.PI * 0.6, 0, 0]}
-      />
-
-      {/* Feathers */}
-      <group position={[0, 0.1, -1]}>
-        <mesh
-          geometry={topFeatherGeometry}
           material={birdMaterial}
-          position={[0, 0.3, 0]}
+          scale={[1, 0.85, 0.85]}
         />
-        <mesh
-          geometry={bottomFeatherGeometry}
-          material={birdMaterial}
-          position={[0, -0.2, 0]}
-        />
-      </group>
 
-      {/* Left leg */}
-      <group position={[0.4, 0.1, 0]}>
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0, -1.3, 0]}
-          scale={[0.1, 1, 0.1]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, Math.PI * 0.25, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0, -1.8, 0.15]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, 0, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[-0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, -Math.PI * 0.25, 0]}
-        />
-      </group>
+        {/* Eyes */}
+        <group position={[0, 0.4, 0.78]}>
+          <mesh
+            geometry={sphereGeometry}
+            material={eyeMaterial}
+            position={[0.3, 0, 0]}
+            scale={[0.11, 0.11, 0.11]}
+          />
+          <mesh
+            geometry={sphereGeometry}
+            material={eyeMaterial}
+            position={[-0.3, 0, 0]}
+            scale={[0.11, 0.11, 0.11]}
+          />
+        </group>
 
-      {/* Right leg */}
-      <group position={[-0.4, 0.1, 0]}>
+        {/* Beek */}
         <mesh
-          geometry={boxGeometry}
+          geometry={coneGeometry}
           material={detailMaterial}
-          position={[0, -1.3, 0]}
-          scale={[0.1, 1, 0.1]}
+          position={[0, -0.3, 1.26]}
+          scale={[0.4, 1.2, 0.4]}
+          rotation={[Math.PI * 0.6, 0, 0]}
         />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, Math.PI * 0.25, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0, -1.8, 0.15]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, 0, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[-0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, -Math.PI * 0.25, 0]}
-        />
+
+        {/* Feathers */}
+        <group position={[0, 0.1, -1]}>
+          <mesh
+            geometry={topFeatherGeometry}
+            material={birdMaterial}
+            position={[0, 0.3, 0]}
+          />
+          <mesh
+            geometry={bottomFeatherGeometry}
+            material={birdMaterial}
+            position={[0, -0.2, 0]}
+          />
+        </group>
+
+        {/* Left leg */}
+        <group position={[0.4, 0.1, 0]}>
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.3, 0]}
+            scale={[0.1, 1, 0.1]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, Math.PI * 0.25, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.8, 0.15]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, 0, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[-0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, -Math.PI * 0.25, 0]}
+          />
+        </group>
+
+        {/* Right leg */}
+        <group position={[-0.4, 0.1, 0]}>
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.3, 0]}
+            scale={[0.1, 1, 0.1]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, Math.PI * 0.25, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.8, 0.15]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, 0, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[-0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, -Math.PI * 0.25, 0]}
+          />
+        </group>
       </group>
-    </group>
+    </RigidBody>
   );
 }
