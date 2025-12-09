@@ -10,7 +10,7 @@ export default function Cube({ size, position }) {
   const [isTouched, setIsTouched] = useState(false);
 
   return (
-    <RigidBody type="fixed">
+    <RigidBody type="fixed" friction={0.5}>
       <mesh
         geometry={boxGeometry}
         material={isTouched ? touchedMaterial : cubeMaterial}
