@@ -6,6 +6,7 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const coneGeometry = new THREE.ConeGeometry(1, 1, 4, 1);
 const birdMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff" });
 const legMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
+const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
 export default function Bird({ position }) {
   return (
@@ -16,6 +17,22 @@ export default function Bird({ position }) {
         material={birdMaterial}
         scale={[1, 0.85, 1]}
       />
+
+      {/* Eyes */}
+      <group position={[0, 0.4, 0.9]}>
+        <mesh
+          geometry={sphereGeometry}
+          material={eyeMaterial}
+          position={[0.3, 0, 0]}
+          scale={[0.11, 0.11, 0.11]}
+        />
+        <mesh
+          geometry={sphereGeometry}
+          material={eyeMaterial}
+          position={[-0.3, 0, 0]}
+          scale={[0.11, 0.11, 0.11]}
+        />
+      </group>
 
       {/* Beek */}
       <mesh
