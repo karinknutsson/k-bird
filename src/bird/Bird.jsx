@@ -10,12 +10,12 @@ const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
 const topFeatherGeometry = new THREE.BoxGeometry(0.2, 0.8, 1);
 const topFeatherMatrix = new THREE.Matrix4();
-topFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.6);
+topFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.8);
 topFeatherGeometry.applyMatrix4(topFeatherMatrix);
 
-const bottomFeatherGeometry = new THREE.BoxGeometry(0.2, 0.4, 1);
+const bottomFeatherGeometry = new THREE.BoxGeometry(0.2, 0.3, 1);
 const bottomFeatherMatrix = new THREE.Matrix4();
-bottomFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.2);
+bottomFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.3);
 bottomFeatherGeometry.applyMatrix4(bottomFeatherMatrix);
 
 export default function Bird({ position, rotation }) {
@@ -63,7 +63,7 @@ export default function Bird({ position, rotation }) {
         <mesh
           geometry={bottomFeatherGeometry}
           material={birdMaterial}
-          position={[0, -0.3, 0]}
+          position={[0, -0.2, 0]}
         />
       </group>
 
