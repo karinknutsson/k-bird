@@ -9,7 +9,8 @@ export default function Experience() {
     <>
       <OrbitControls makeDefault />
 
-      <Physics debug>
+      {/* <Physics debug> */}
+      <Physics>
         <Lights />
 
         <mesh>
@@ -20,7 +21,6 @@ export default function Experience() {
         <Pyramid />
 
         <Bird position={[0.5, 0.85, 0.56]} rotation={[0, Math.PI * 0.1, 0]} />
-        {/* <Bird position={[1, 0.35, 0.62]} rotation={[0, Math.PI, 0]} /> */}
       </Physics>
     </>
   );

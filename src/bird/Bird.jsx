@@ -29,20 +29,19 @@ export default function Bird({ position, rotation }) {
   const bird = useRef();
   const [subscribeKeys, getKeys] = useKeyboardControls();
 
-  const jump = () => {
-    console.log("jump");
+  const jumpDownLeft = () => {
     bird.current.applyImpulse({ x: 0, y: 0.5, z: 0.15 });
   };
 
   useEffect(() => {
-    const unsubscribeJump = subscribeKeys(
-      (state) => state.jump,
+    const unsubscribeJumpDownLeft = subscribeKeys(
+      (state) => state.downLeft,
       (value) => {
-        if (value) jump();
+        if (value) jumpDownLeft();
       }
     );
     return () => {
-      unsubscribeJump();
+      unsubscribeJumpDownLeft();
     };
   }, []);
 

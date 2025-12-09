@@ -7,7 +7,14 @@ import { KeyboardControls } from "@react-three/drei";
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 
 root.render(
-  <KeyboardControls map={[{ name: "jump", keys: ["Space"] }]}>
+  <KeyboardControls
+    map={[
+      { name: "upLeft", keys: ["Numpad7"] },
+      { name: "upRight", keys: ["Numpad9"] },
+      { name: "downLeft", keys: ["Numpad1"] },
+      { name: "downRight", keys: ["Numpad2"] },
+    ]}
+  >
     <Canvas
       shadows
       camera={{
