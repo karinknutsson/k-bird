@@ -2,6 +2,9 @@ import Cube from "./Cube";
 
 const cubeSize = 0.5;
 
+/**
+ * Generate Manhattan rings
+ */
 function getCubeRing(level) {
   const cubes = [];
 
