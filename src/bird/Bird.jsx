@@ -1,5 +1,11 @@
+import { ConeCollider, RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
+import { useKeyboardControls } from "@react-three/drei";
+import { useEffect, useRef, useState } from "react";
 
+/**
+ * Geometry
+ */
 const sphereGeometry = new THREE.IcosahedronGeometry(1, 30);
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const coneGeometry = new THREE.ConeGeometry(1, 1, 4, 1);
@@ -17,116 +23,245 @@ const bottomFeatherMatrix = new THREE.Matrix4();
 bottomFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.3);
 bottomFeatherGeometry.applyMatrix4(bottomFeatherMatrix);
 
-export default function Bird({ position, rotation }) {
+export default function Bird({ position }) {
+  const bird = useRef();
+  const birdDirection = useRef("downLeft");
+  const [subscribeKeys, getKeys] = useKeyboardControls();
+  let isJumping = false;
+
+  /**
+   * Jump functionality
+   */
+  // Lock / unlock jump
+  const setIsJumping = (value) => {
+    if (value) {
+      isJumping = true;
+    } else {
+      setTimeout(() => {
+        isJumping = false;
+      }, 1000);
+    }
+  };
+
+  // Jump down left
+  const jumpDownLeft = () => {
+    setIsJumping(true);
+    bird.current.applyImpulse({ x: 0, y: 1.2, z: 0.39 });
+
+    if (birdDirection.current === "downRight") {
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+    } else if (birdDirection.current === "upRight") {
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.016, z: 0 });
+    } else if (birdDirection.current === "upLeft") {
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+    }
+
+    birdDirection.current = "downLeft";
+    setIsJumping(false);
+  };
+
+  // Jump down right
+  const jumpDownRight = () => {
+    setIsJumping(true);
+    bird.current.applyImpulse({ x: 0.39, y: 1.2, z: 0 });
+
+    if (birdDirection.current === "downLeft") {
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+    } else if (birdDirection.current === "upRight") {
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+    } else if (birdDirection.current === "upLeft") {
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.016, z: 0 });
+    }
+
+    birdDirection.current = "downRight";
+    setIsJumping(false);
+  };
+
+  // Jump up left
+  const jumpUpLeft = () => {
+    setIsJumping(true);
+    bird.current.applyImpulse({ x: -0.29, y: 2.4, z: 0 });
+
+    if (birdDirection.current === "downLeft") {
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+    } else if (birdDirection.current === "downRight") {
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.012, z: 0 });
+    } else if (birdDirection.current === "upRight") {
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+    }
+
+    birdDirection.current = "upLeft";
+    setIsJumping(false);
+  };
+
+  // Jump up right
+  const jumpUpRight = () => {
+    setIsJumping(true);
+    bird.current.applyImpulse({ x: 0, y: 2.4, z: -0.29 });
+
+    if (birdDirection.current === "downLeft") {
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
+    } else if (birdDirection.current === "downRight") {
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+    } else if (birdDirection.current === "upLeft") {
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+    }
+
+    birdDirection.current = "upRight";
+    setIsJumping(false);
+  };
+
+  useEffect(() => {
+    const unsubscribeJumpDownLeft = subscribeKeys(
+      (state) => state.downLeft,
+      (value) => {
+        if (!isJumping && value) jumpDownLeft();
+      }
+    );
+
+    const unsubscribeJumpDownRight = subscribeKeys(
+      (state) => state.downRight,
+      (value) => {
+        if (!isJumping && value) jumpDownRight();
+      }
+    );
+
+    const unsubscribeJumpUpRight = subscribeKeys(
+      (state) => state.upRight,
+      (value) => {
+        if (!isJumping && value) jumpUpRight();
+      }
+    );
+
+    const unsubscribeJumpUpLeft = subscribeKeys(
+      (state) => state.upLeft,
+      (value) => {
+        if (!isJumping && value) jumpUpLeft();
+      }
+    );
+
+    return () => {
+      unsubscribeJumpDownLeft();
+      unsubscribeJumpDownRight();
+      unsubscribeJumpUpRight();
+      unsubscribeJumpUpLeft();
+    };
+  }, []);
+
   return (
-    <group position={position} rotation={rotation} scale={0.2}>
-      {/* Body*/}
-      <mesh
-        geometry={sphereGeometry}
-        material={birdMaterial}
-        scale={[1, 0.85, 0.85]}
-      />
+    <RigidBody ref={bird} colliders={false} canSleep={false}>
+      {/* Collider */}
+      <ConeCollider position={position} args={[0.36, 0.15]} mass={0.5} />
 
-      {/* Eyes */}
-      <group position={[0, 0.4, 0.78]}>
+      <group position={position} scale={0.2}>
+        {/* Body */}
         <mesh
           geometry={sphereGeometry}
-          material={eyeMaterial}
-          position={[0.3, 0, 0]}
-          scale={[0.11, 0.11, 0.11]}
-        />
-        <mesh
-          geometry={sphereGeometry}
-          material={eyeMaterial}
-          position={[-0.3, 0, 0]}
-          scale={[0.11, 0.11, 0.11]}
-        />
-      </group>
-
-      {/* Beek */}
-      <mesh
-        geometry={coneGeometry}
-        material={detailMaterial}
-        position={[0, -0.3, 1.26]}
-        scale={[0.4, 1.2, 0.4]}
-        rotation={[Math.PI * 0.6, 0, 0]}
-      />
-
-      {/* Feathers */}
-      <group position={[0, 0.1, -1]}>
-        <mesh
-          geometry={topFeatherGeometry}
           material={birdMaterial}
-          position={[0, 0.3, 0]}
+          scale={[1, 0.85, 0.85]}
         />
-        <mesh
-          geometry={bottomFeatherGeometry}
-          material={birdMaterial}
-          position={[0, -0.2, 0]}
-        />
-      </group>
 
-      {/* Left leg */}
-      <group position={[0.4, 0.1, 0]}>
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0, -1.3, 0]}
-          scale={[0.1, 1, 0.1]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, Math.PI * 0.25, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0, -1.8, 0.15]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, 0, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[-0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, -Math.PI * 0.25, 0]}
-        />
-      </group>
+        {/* Eyes */}
+        <group position={[0, 0.4, 0.78]}>
+          <mesh
+            geometry={sphereGeometry}
+            material={eyeMaterial}
+            position={[0.3, 0, 0]}
+            scale={[0.11, 0.11, 0.11]}
+          />
+          <mesh
+            geometry={sphereGeometry}
+            material={eyeMaterial}
+            position={[-0.3, 0, 0]}
+            scale={[0.11, 0.11, 0.11]}
+          />
+        </group>
 
-      {/* Right leg */}
-      <group position={[-0.4, 0.1, 0]}>
+        {/* Beek */}
         <mesh
-          geometry={boxGeometry}
+          geometry={coneGeometry}
           material={detailMaterial}
-          position={[0, -1.3, 0]}
-          scale={[0.1, 1, 0.1]}
+          position={[0, -0.3, 1.26]}
+          scale={[0.4, 1.2, 0.4]}
+          rotation={[Math.PI * 0.6, 0, 0]}
         />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, Math.PI * 0.25, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[0, -1.8, 0.15]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, 0, 0]}
-        />
-        <mesh
-          geometry={boxGeometry}
-          material={detailMaterial}
-          position={[-0.17, -1.8, 0.14]}
-          scale={[0.1, 0.1, 0.4]}
-          rotation={[0, -Math.PI * 0.25, 0]}
-        />
+
+        {/* Feathers */}
+        <group position={[0, 0.1, -1]}>
+          <mesh
+            geometry={topFeatherGeometry}
+            material={birdMaterial}
+            position={[0, 0.3, 0]}
+          />
+          <mesh
+            geometry={bottomFeatherGeometry}
+            material={birdMaterial}
+            position={[0, -0.2, 0]}
+          />
+        </group>
+
+        {/* Left leg */}
+        <group position={[0.4, 0.1, 0]}>
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.3, 0]}
+            scale={[0.1, 1, 0.1]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, Math.PI * 0.25, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.8, 0.15]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, 0, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[-0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, -Math.PI * 0.25, 0]}
+          />
+        </group>
+
+        {/* Right leg */}
+        <group position={[-0.4, 0.1, 0]}>
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.3, 0]}
+            scale={[0.1, 1, 0.1]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, Math.PI * 0.25, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[0, -1.8, 0.15]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, 0, 0]}
+          />
+          <mesh
+            geometry={boxGeometry}
+            material={detailMaterial}
+            position={[-0.17, -1.8, 0.14]}
+            scale={[0.1, 0.1, 0.4]}
+            rotation={[0, -Math.PI * 0.25, 0]}
+          />
+        </group>
       </group>
-    </group>
+    </RigidBody>
   );
 }
