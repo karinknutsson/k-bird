@@ -3,6 +3,9 @@ import * as THREE from "three";
 import { useKeyboardControls } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * Geometry
+ */
 const sphereGeometry = new THREE.IcosahedronGeometry(1, 30);
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const coneGeometry = new THREE.ConeGeometry(1, 1, 4, 1);
@@ -36,7 +39,7 @@ export default function Bird({ position }) {
     } else {
       setTimeout(() => {
         isJumping = false;
-      }, 800);
+      }, 1000);
     }
   };
 
@@ -99,9 +102,9 @@ export default function Bird({ position }) {
     if (birdDirection.current === "downLeft") {
       bird.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.0062, z: 0 });
+      bird.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.0062, z: 0 });
+      bird.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
     }
 
     birdDirection.current = "upRight";
