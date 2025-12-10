@@ -35,6 +35,7 @@ export default function Bird({ position }) {
   let isJumping = false;
 
   const start = useGame((state) => state.start);
+  const setTorqueDirection = useGame((state) => state.setTorqueDirection);
 
   /**
    * Jump functionality
@@ -163,6 +164,11 @@ export default function Bird({ position }) {
   const birdCollision = () => {
     // console.log(bird.current.translation());
     const position = bird.current.translation();
+    if (position.x < -0.01) {
+      setTorqueDirection("counterClockwise");
+    } else if (position.z < -0.01) {
+      setTorqueDirection("clockwise");
+    }
   };
 
   return (

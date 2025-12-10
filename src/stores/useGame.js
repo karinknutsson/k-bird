@@ -11,7 +11,7 @@ export default create(
       cubeHits: 0,
 
       setCubeCount: (count) => {
-        set((state) => {
+        set((_) => {
           return {
             cubeCount: count,
           };
@@ -29,6 +29,14 @@ export default create(
       /**
        * Pyramid torque
        */
+      torqueDirection: null,
+
+      setTorqueDirection: (direction) =>
+        set((state) => {
+          return {
+            torqueDirection: direction,
+          };
+        }),
 
       /**
        * Phases

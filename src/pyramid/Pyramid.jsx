@@ -44,11 +44,32 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const setCubeCount = useGame((state) => state.setCubeCount);
-  const cubeCount = useGame((state) => state.cubeCount);
+  const setTorqueDirection = useGame((state) => state.setTorqueDirection);
+
+  const turnPyramid = (direction) => {
+    console.log(direction);
+
+    setTimeout(() => {
+      setTorqueDirection(null);
+    }, 2000);
+  };
 
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
     setCubeCount(totalCubes);
+
+    const unsubscribeTorqueDirection = useGame.subscribe(
+      (state) => state.torqueDirection,
+      (direction) => {
+        if (!direction) return;
+
+        turnPyramid(direction);
+      }
+    );
+
+    return () => {
+      unsubscribeTorqueDirection();
+    };
   }, []);
 
   return (
