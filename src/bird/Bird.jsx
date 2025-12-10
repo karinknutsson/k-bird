@@ -1,4 +1,4 @@
-import { ConeCollider, RigidBody } from "@react-three/rapier";
+import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 import { useKeyboardControls } from "@react-three/drei";
 import { useEffect, useRef } from "react";
@@ -40,13 +40,13 @@ export default function Bird({ position }) {
    * Jump functionality
    */
   // Lock / unlock jump
-  const setIsJumping = (value) => {
+  const setIsJumping = (value, ms = 800) => {
     if (value) {
       isJumping = true;
     } else {
       setTimeout(() => {
         isJumping = false;
-      }, 1000);
+      }, ms);
     }
   };
 
@@ -98,7 +98,7 @@ export default function Bird({ position }) {
     }
 
     birdDirection.current = "upLeft";
-    setIsJumping(false);
+    setIsJumping(false, 1150);
   };
 
   // Jump up right
@@ -115,7 +115,7 @@ export default function Bird({ position }) {
     }
 
     birdDirection.current = "upRight";
-    setIsJumping(false);
+    setIsJumping(false, 1150);
   };
 
   useEffect(() => {
@@ -162,7 +162,7 @@ export default function Bird({ position }) {
   return (
     <RigidBody ref={bird} colliders={false} canSleep={false}>
       {/* Collider */}
-      <ConeCollider position={position} args={[0.36, 0.15]} mass={0.5} />
+      <CuboidCollider position={position} args={[0.1, 0.35, 0.1]} mass={0.5} />
 
       <group position={position} scale={0.2}>
         {/* Body */}
