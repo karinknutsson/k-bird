@@ -1,7 +1,8 @@
-import { ConeCollider, RigidBody } from "@react-three/rapier";
+import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 import { useKeyboardControls } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import useGame from "../stores/useGame";
 
 /**
  * Geometry
@@ -9,9 +10,6 @@ import { useEffect, useRef, useState } from "react";
 const sphereGeometry = new THREE.IcosahedronGeometry(1, 30);
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const coneGeometry = new THREE.ConeGeometry(1, 1, 4, 1);
-const birdMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff" });
-const detailMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
-const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
 const topFeatherGeometry = new THREE.BoxGeometry(0.2, 0.8, 1);
 const topFeatherMatrix = new THREE.Matrix4();
@@ -23,23 +21,32 @@ const bottomFeatherMatrix = new THREE.Matrix4();
 bottomFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.3);
 bottomFeatherGeometry.applyMatrix4(bottomFeatherMatrix);
 
+/**
+ * Material
+ */
+const birdMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff" });
+const detailMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
+const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
+
 export default function Bird({ position }) {
   const bird = useRef();
   const birdDirection = useRef("downLeft");
   const [subscribeKeys, getKeys] = useKeyboardControls();
   let isJumping = false;
 
+  const start = useGame((state) => state.start);
+
   /**
    * Jump functionality
    */
   // Lock / unlock jump
-  const setIsJumping = (value) => {
+  const setIsJumping = (value, ms = 800) => {
     if (value) {
       isJumping = true;
     } else {
       setTimeout(() => {
         isJumping = false;
-      }, 1000);
+      }, ms);
     }
   };
 
@@ -91,7 +98,7 @@ export default function Bird({ position }) {
     }
 
     birdDirection.current = "upLeft";
-    setIsJumping(false);
+    setIsJumping(false, 1150);
   };
 
   // Jump up right
@@ -108,10 +115,14 @@ export default function Bird({ position }) {
     }
 
     birdDirection.current = "upRight";
-    setIsJumping(false);
+    setIsJumping(false, 1150);
   };
 
   useEffect(() => {
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
+
     const unsubscribeJumpDownLeft = subscribeKeys(
       (state) => state.downLeft,
       (value) => {
@@ -151,7 +162,7 @@ export default function Bird({ position }) {
   return (
     <RigidBody ref={bird} colliders={false} canSleep={false}>
       {/* Collider */}
-      <ConeCollider position={position} args={[0.36, 0.15]} mass={0.5} />
+      <CuboidCollider position={position} args={[0.1, 0.35, 0.1]} mass={0.5} />
 
       <group position={position} scale={0.2}>
         {/* Body */}
