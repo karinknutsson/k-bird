@@ -27,8 +27,25 @@ export default create(
       },
 
       /**
-       * Pyramid torque
+       * Bird
        */
+      birdRef: null,
+
+      setBirdRef: (ref) => set({ birdRef: ref }),
+
+      /**
+       * Pyramid
+       */
+      pyramidRef: null,
+
+      setPyramidRef: (ref) => set({ pyramidRef: ref }),
+
+      isSpinning: false,
+      anchorB: null,
+
+      startSpin: (anchorB) => set({ spinning: true, anchorB }),
+      stopSpin: () => set({ spinning: false, anchorB: null }),
+
       torqueDirection: null,
 
       setTorqueDirection: (direction) =>

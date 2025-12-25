@@ -9,10 +9,10 @@ const root = ReactDOM.createRoot(document.querySelector("#root"));
 root.render(
   <KeyboardControls
     map={[
-      { name: "upLeft", keys: ["Numpad7"] },
-      { name: "upRight", keys: ["Numpad9"] },
-      { name: "downLeft", keys: ["Numpad1"] },
-      { name: "downRight", keys: ["Numpad3"] },
+      { name: "upLeft", keys: ["Numpad7", "KeyW"] },
+      { name: "upRight", keys: ["Numpad9", "KeyR"] },
+      { name: "downLeft", keys: ["Numpad1", "KeyX"] },
+      { name: "downRight", keys: ["Numpad3", "KeyV"] },
     ]}
   >
     <Canvas

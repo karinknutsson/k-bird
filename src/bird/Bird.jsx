@@ -29,7 +29,9 @@ const detailMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
 const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
 export default function Bird({ position }) {
-  const bird = useRef();
+  const birdRef = useRef();
+  const setBirdRef = useGame((state) => state.setBirdRef);
+
   const birdDirection = useRef("downLeft");
   const [subscribeKeys, getKeys] = useKeyboardControls();
   let isJumping = false;
@@ -54,14 +56,14 @@ export default function Bird({ position }) {
   // Jump down left
   const jumpDownLeft = () => {
     setIsJumping(true);
-    bird.current.applyImpulse({ x: 0, y: 1.2, z: 0.39 });
+    birdRef.current.applyImpulse({ x: 0, y: 1.2, z: 0.39 });
 
     if (birdDirection.current === "downRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.016, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.016, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
     }
 
     birdDirection.current = "downLeft";
@@ -71,14 +73,14 @@ export default function Bird({ position }) {
   // Jump down right
   const jumpDownRight = () => {
     setIsJumping(true);
-    bird.current.applyImpulse({ x: 0.39, y: 1.2, z: 0 });
+    birdRef.current.applyImpulse({ x: 0.39, y: 1.2, z: 0 });
 
     if (birdDirection.current === "downLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.016, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.016, z: 0 });
     }
 
     birdDirection.current = "downRight";
@@ -88,14 +90,14 @@ export default function Bird({ position }) {
   // Jump up left
   const jumpUpLeft = () => {
     setIsJumping(true);
-    bird.current.applyImpulse({ x: -0.29, y: 2.4, z: 0 });
+    birdRef.current.applyImpulse({ x: -0.29, y: 2.4, z: 0 });
 
     if (birdDirection.current === "downLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.012, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.012, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
     }
 
     birdDirection.current = "upLeft";
@@ -105,14 +107,14 @@ export default function Bird({ position }) {
   // Jump up right
   const jumpUpRight = () => {
     setIsJumping(true);
-    bird.current.applyImpulse({ x: 0, y: 2.4, z: -0.29 });
+    birdRef.current.applyImpulse({ x: 0, y: 2.4, z: -0.29 });
 
     if (birdDirection.current === "downLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      bird.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      bird.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
     }
 
     birdDirection.current = "upRight";
@@ -120,6 +122,8 @@ export default function Bird({ position }) {
   };
 
   useEffect(() => {
+    setBirdRef(birdRef);
+
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
@@ -162,8 +166,8 @@ export default function Bird({ position }) {
   }, []);
 
   const birdCollision = () => {
-    // console.log(bird.current.translation());
-    const position = bird.current.translation();
+    // console.log(birdRef.current.translation());
+    const position = birdRef.current.translation();
     if (position.x < -0.01) {
       setTorqueDirection("counterClockwise");
     } else if (position.z < -0.01) {
@@ -172,7 +176,7 @@ export default function Bird({ position }) {
   };
 
   return (
-    <RigidBody ref={bird} colliders={false} canSleep={false}>
+    <RigidBody ref={birdRef} colliders={false} canSleep={false}>
       {/* Collider */}
       <CuboidCollider
         position={position}

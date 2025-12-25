@@ -28,7 +28,8 @@ export default function Cube({ size, position }) {
   };
 
   return (
-    <RigidBody type="fixed" friction={0.5} colliders={false}>
+    // <RigidBody type="fixed" friction={0.5} colliders={false}>
+    <>
       {/* Collider */}
       <CuboidCollider
         onCollisionEnter={handleHitCube}
@@ -43,6 +44,7 @@ export default function Cube({ size, position }) {
         scale={[size, size, size]}
         position={position}
       ></mesh>
-    </RigidBody>
+    </>
+    // </RigidBody>
   );
 }
