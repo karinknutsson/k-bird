@@ -179,10 +179,11 @@ export default function Bird({ position }) {
 
   const birdCollision = () => {
     const position = birdRef.current.translation();
+    console.log("x: " + position.x, ", z: " + position.z);
 
-    if (position.x < -0.01) {
+    if (position.x < -0.35) {
       setTorqueDirection("counterClockwise");
-    } else if (position.z < -0.01) {
+    } else if (position.z < -0.35) {
       setTorqueDirection("clockwise");
     }
   };

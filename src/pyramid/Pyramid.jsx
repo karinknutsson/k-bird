@@ -74,7 +74,7 @@ export default function Pyramid({ levelCount = 4 }) {
     setTimeout(() => {
       setTorqueDirection(null);
       stopSpin();
-    }, 2000);
+    }, 1600);
   };
 
   useEffect(() => {
