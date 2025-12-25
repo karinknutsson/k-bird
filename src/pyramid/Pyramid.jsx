@@ -3,7 +3,6 @@ import Cube from "./Cube";
 import useGame from "../stores/useGame";
 import { RigidBody } from "@react-three/rapier";
 import Bird from "../bird/Bird";
-import BirdPyramidJoint from "./BirdPyramidJoint";
 
 const cubeSize = 0.5;
 
@@ -48,38 +47,8 @@ export function CubeLevel({ level }) {
 export default function Pyramid({ levelCount = 4 }) {
   const setCubeCount = useGame((state) => state.setCubeCount);
   const pyramidRef = useRef();
-  const setPyramidRef = useGame((state) => state.setPyramidRef);
-  const isSpinning = useGame((state) => state.isSpinning);
-
-  const turnPyramid = (direction) => {
-    const { birdRef, pyramidRef, startSpin, stopSpin, setTorqueDirection } =
-      useGame.getState();
-
-    if (!birdRef?.current || !pyramidRef?.current) return;
-
-    const birdWorld = birdRef.current.translation();
-    const pyramidWorld = pyramidRef.current.translation();
-
-    const anchorB = [
-      birdWorld.x - pyramidWorld.x,
-      birdWorld.y - pyramidWorld.y,
-      birdWorld.z - pyramidWorld.z,
-    ];
-
-    startSpin(anchorB);
-
-    const impulse = direction === "clockwise" ? -18 : 18;
-    pyramidRef.current.applyTorqueImpulse({ x: 0, y: impulse, z: 0 });
-
-    setTimeout(() => {
-      setTorqueDirection(null);
-      stopSpin();
-    }, 1600);
-  };
 
   useEffect(() => {
-    setPyramidRef(pyramidRef);
-
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
     setCubeCount(totalCubes);
 
@@ -87,10 +56,6 @@ export default function Pyramid({ levelCount = 4 }) {
       (state) => state.torqueDirection,
       (direction) => {
         if (!direction) return;
-
-        setTimeout(() => {
-          turnPyramid(direction);
-        }, 800);
       }
     );
 
@@ -117,8 +82,6 @@ export default function Pyramid({ levelCount = 4 }) {
       </RigidBody>
 
       <Bird position={[0, 1.7, 0]} />
-
-      {isSpinning && <BirdPyramidJoint />}
     </>
   );
 }

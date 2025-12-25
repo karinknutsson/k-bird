@@ -34,17 +34,9 @@ export default create(
       setBirdRef: (ref) => set({ birdRef: ref }),
 
       /**
-       * Pyramid
+       * Camera
        */
-      pyramidRef: null,
-
-      setPyramidRef: (ref) => set({ pyramidRef: ref }),
-
-      isSpinning: false,
-      anchorB: null,
-
-      startSpin: (anchorB) => set({ isSpinning: true, anchorB }),
-      stopSpin: () => set({ isSpinning: false, anchorB: null }),
+      isCameraMoving: false,
 
       torqueDirection: null,
 
@@ -54,6 +46,16 @@ export default create(
             torqueDirection: direction,
           };
         }),
+
+      /**
+       * Pyramid
+       */
+
+      // isSpinning: false,
+      // anchorB: null,
+
+      // startSpin: (anchorB) => set({ isSpinning: true, anchorB }),
+      // stopSpin: () => set({ isSpinning: false, anchorB: null }),
 
       /**
        * Phases

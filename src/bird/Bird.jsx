@@ -30,7 +30,6 @@ const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
 export default function Bird({ position }) {
   const birdRef = useRef();
-  const setBirdRef = useGame((state) => state.setBirdRef);
 
   const birdDirection = useRef("downLeft");
   const [subscribeKeys, getKeys] = useKeyboardControls();
@@ -134,8 +133,6 @@ export default function Bird({ position }) {
   };
 
   useEffect(() => {
-    setBirdRef(birdRef);
-
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
