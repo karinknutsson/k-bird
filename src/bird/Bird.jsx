@@ -90,7 +90,13 @@ export default function Bird({ position }) {
   // Jump up left
   const jumpUpLeft = () => {
     setIsJumping(true);
-    birdRef.current.applyImpulse({ x: -0.29, y: 2.4, z: 0 });
+    const position = birdRef.current.translation();
+
+    if (position.x > 0.1) {
+      birdRef.current.applyImpulse({ x: -0.29, y: 2.4, z: 0 });
+    } else {
+      birdRef.current.applyImpulse({ x: -0.4, y: 1.2, z: 0 });
+    }
 
     if (birdDirection.current === "downLeft") {
       birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
@@ -107,7 +113,13 @@ export default function Bird({ position }) {
   // Jump up right
   const jumpUpRight = () => {
     setIsJumping(true);
-    birdRef.current.applyImpulse({ x: 0, y: 2.4, z: -0.29 });
+    const position = birdRef.current.translation();
+
+    if (position.z > 0.1) {
+      birdRef.current.applyImpulse({ x: 0, y: 2.4, z: -0.29 });
+    } else {
+      birdRef.current.applyImpulse({ x: 0, y: 1.2, z: -0.4 });
+    }
 
     if (birdDirection.current === "downLeft") {
       birdRef.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
@@ -166,8 +178,8 @@ export default function Bird({ position }) {
   }, []);
 
   const birdCollision = () => {
-    // console.log(birdRef.current.translation());
     const position = birdRef.current.translation();
+
     if (position.x < -0.01) {
       setTorqueDirection("counterClockwise");
     } else if (position.z < -0.01) {
