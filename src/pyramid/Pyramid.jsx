@@ -47,7 +47,6 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const setCubeCount = useGame((state) => state.setCubeCount);
-  const setTorqueDirection = useGame((state) => state.setTorqueDirection);
   const pyramidRef = useRef();
   const setPyramidRef = useGame((state) => state.setPyramidRef);
   const isSpinning = useGame((state) => state.isSpinning);
@@ -69,8 +68,8 @@ export default function Pyramid({ levelCount = 4 }) {
 
     startSpin(anchorB);
 
-    const impulse = direction === "clockwise" ? 0.5 : -0.5;
-    pyramidRef.current.applyTorqueImpulse({ x: 0, y: 18, z: 0 });
+    const impulse = direction === "clockwise" ? -18 : 18;
+    pyramidRef.current.applyTorqueImpulse({ x: 0, y: impulse, z: 0 });
 
     setTimeout(() => {
       setTorqueDirection(null);

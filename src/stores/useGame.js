@@ -43,13 +43,13 @@ export default create(
       isSpinning: false,
       anchorB: null,
 
-      startSpin: (anchorB) => set({ spinning: true, anchorB }),
-      stopSpin: () => set({ spinning: false, anchorB: null }),
+      startSpin: (anchorB) => set({ isSpinning: true, anchorB }),
+      stopSpin: () => set({ isSpinning: false, anchorB: null }),
 
       torqueDirection: null,
 
       setTorqueDirection: (direction) =>
-        set((state) => {
+        set((_) => {
           return {
             torqueDirection: direction,
           };

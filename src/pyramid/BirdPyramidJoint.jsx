@@ -1,4 +1,5 @@
 import { useFixedJoint } from "@react-three/rapier";
+import useGame from "../stores/useGame";
 
 export default function BirdPyramidJoint() {
   const bird = useGame((state) => state.birdRef);
