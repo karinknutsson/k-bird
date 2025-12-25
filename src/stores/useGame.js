@@ -27,35 +27,13 @@ export default create(
       },
 
       /**
-       * Bird
-       */
-      birdRef: null,
-
-      setBirdRef: (ref) => set({ birdRef: ref }),
-
-      /**
        * Camera
        */
+
       isCameraMoving: false,
+      cameraPosition: "front",
 
-      torqueDirection: null,
-
-      setTorqueDirection: (direction) =>
-        set((_) => {
-          return {
-            torqueDirection: direction,
-          };
-        }),
-
-      /**
-       * Pyramid
-       */
-
-      // isSpinning: false,
-      // anchorB: null,
-
-      // startSpin: (anchorB) => set({ isSpinning: true, anchorB }),
-      // stopSpin: () => set({ isSpinning: false, anchorB: null }),
+      setCameraPosition: (position) => set({ cameraPosition: position }),
 
       /**
        * Phases

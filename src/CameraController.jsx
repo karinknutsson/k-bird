@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 export function SmoothCameraController() {
   const cameraRef = useRef();
-  const { isCameraMoving } = useGame();
+  const { cameraPosition, setCameraPosition, isCameraMoving } = useGame();
 
   const cameraPositions = {
     front: new THREE.Vector3(5, 6, 5),
