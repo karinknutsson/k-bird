@@ -89,7 +89,9 @@ export default function Pyramid({ levelCount = 4 }) {
       (direction) => {
         if (!direction) return;
 
-        // turnPyramid(direction);
+        setTimeout(() => {
+          turnPyramid(direction);
+        }, 800);
       }
     );
 
