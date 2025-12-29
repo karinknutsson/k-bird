@@ -36,6 +36,7 @@ export default function Bird({ position }) {
   let isJumping = false;
 
   const start = useGame((state) => state.start);
+  const cameraPosition = useGame((state) => state.cameraPosition);
   const moveCamera = useGame((state) => state.moveCamera);
 
   /**
@@ -178,10 +179,35 @@ export default function Bird({ position }) {
     const position = birdRef.current.translation();
     console.log("x: " + position.x, ", z: " + position.z);
 
-    if (position.x < -0.35) {
-      moveCamera("clockwise");
-    } else if (position.z < -0.35) {
-      moveCamera("counterClockwise");
+    switch (cameraPosition) {
+      case 0:
+        if (position.x < -0.3) {
+          moveCamera("clockwise");
+        } else if (position.z < -0.3) {
+          moveCamera("counterClockwise");
+        }
+        break;
+      case 1:
+        if (position.x > 0.3) {
+          moveCamera("counterClockwise");
+        } else if (position.z < -0.3) {
+          moveCamera("clockwise");
+        }
+        break;
+      case 2:
+        if (position.x > 0.3) {
+          moveCamera("clockwise");
+        } else if (position.z > 0.3) {
+          moveCamera("counterClockwise");
+        }
+        break;
+      case 3:
+        if (position.x < -0.3) {
+          moveCamera("counterClockwise");
+        } else if (position.z > 0.3) {
+          moveCamera("clockwise");
+        }
+        break;
     }
   };
 
