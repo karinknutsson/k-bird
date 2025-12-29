@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
+import * as THREE from "three";
 
 export default create(
   subscribeWithSelector((set) => {
@@ -31,9 +32,40 @@ export default create(
        */
 
       isCameraMoving: false,
-      cameraPosition: "front",
+      cameraPosition: 0,
 
-      setCameraPosition: (position) => set({ cameraPosition: position }),
+      cameraPositions: [
+        new THREE.Vector3(5, 6, 5),
+        new THREE.Vector3(-5, 6, 5),
+        new THREE.Vector3(-5, 6, -5),
+        new THREE.Vector3(5, 6, -5),
+      ],
+
+      moveCamera: (direction) => {
+        set((state) => {
+          const nextPosition =
+            direction === "clockwise"
+              ? state.cameraPosition === 3
+                ? 0
+                : state.cameraPosition + 1
+              : state.cameraPosition === 0
+              ? 3
+              : state.cameraPosition - 1;
+
+          return {
+            isCameraMoving: true,
+            cameraPosition: nextPosition,
+          };
+        });
+      },
+
+      stopCamera: () => {
+        set((_) => {
+          return {
+            isCameraMoving: false,
+          };
+        });
+      },
 
       /**
        * Phases

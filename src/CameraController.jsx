@@ -1,31 +1,25 @@
-// components/SmoothCameraController.jsx
-import { useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
-import { useGame } from "../stores/useGame";
+import { useFrame, useThree } from "@react-three/fiber";
+import useGame from "./stores/useGame";
 import * as THREE from "three";
 
-export function SmoothCameraController() {
-  const cameraRef = useRef();
-  const { cameraPosition, setCameraPosition, isCameraMoving } = useGame();
+export default function CameraController() {
+  const { camera } = useThree();
+  const { cameraPosition, cameraPositions, isCameraMoving, stopCamera } =
+    useGame();
 
-  const cameraPositions = {
-    front: new THREE.Vector3(5, 6, 5),
-    left: new THREE.Vector3(-5, 6, 5),
-    back: new THREE.Vector3(-5, 6, -5),
-    right: new THREE.Vector3(5, 6, -5),
-  };
+  useFrame((_, delta) => {
+    if (!camera) return;
 
-  useFrame((state, delta) => {
-    if (!cameraRef.current) return;
+    if (isCameraMoving) {
+      const targetPosition = cameraPositions[cameraPosition];
+      camera.position.lerp(targetPosition, 5 * delta);
 
-    const camera = cameraRef.current;
+      const target = new THREE.Vector3(0, 0, 0);
+      camera.lookAt(target);
 
-    const targetPosition = cameraPositions[currentPosition];
-    camera.position.lerp(targetPosition, 5 * delta);
-
-    const target = new THREE.Vector3(0, 0, 0);
-    camera.lookAt(target);
+      if (targetPosition === camera.position) stopCamera();
+    }
   });
 
-  return <perspectiveCamera ref={cameraRef} position={[5, 6, 5]} />;
+  return <></>;
 }

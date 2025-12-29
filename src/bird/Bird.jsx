@@ -36,7 +36,7 @@ export default function Bird({ position }) {
   let isJumping = false;
 
   const start = useGame((state) => state.start);
-  const setTorqueDirection = useGame((state) => state.setTorqueDirection);
+  const moveCamera = useGame((state) => state.moveCamera);
 
   /**
    * Jump functionality
@@ -179,9 +179,9 @@ export default function Bird({ position }) {
     console.log("x: " + position.x, ", z: " + position.z);
 
     if (position.x < -0.35) {
-      setTorqueDirection("counterClockwise");
+      moveCamera("counterClockwise");
     } else if (position.z < -0.35) {
-      setTorqueDirection("clockwise");
+      moveCamera("clockwise");
     }
   };
 
