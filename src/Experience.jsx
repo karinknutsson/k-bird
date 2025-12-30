@@ -7,7 +7,7 @@ import CameraController from "./CameraController.jsx";
 export default function Experience() {
   return (
     <>
-      {/* <OrbitControls makeDefault /> */}
+      <OrbitControls />
 
       {/* <Physics debug> */}
       <Physics>

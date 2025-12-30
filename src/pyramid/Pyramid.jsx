@@ -44,6 +44,23 @@ export function CubeLevel({ level }) {
   );
 }
 
+export function GroundLevel({ level }) {
+  const positions = getCubeRing(level);
+
+  return (
+    <group position={[0, -level * cubeSize, 0]}>
+      {positions.map((p, index) => {
+        return (
+          <mesh position={[p[0] * cubeSize, 0, p[2] * cubeSize]}>
+            <boxGeometry args={[cubeSize, 0.1, cubeSize]} />
+            <meshBasicMaterial color="black" />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
 export default function Pyramid({ levelCount = 4 }) {
   const setCubeCount = useGame((state) => state.setCubeCount);
   const pyramidRef = useRef();
@@ -64,10 +81,9 @@ export default function Pyramid({ levelCount = 4 }) {
       </RigidBody>
 
       <RigidBody type="fixed">
-        <mesh position={[0, -levelCount * cubeSize * 0.5, 0]}>
-          <boxGeometry args={[levelCount - 0.5, 0.1, levelCount - 0.5]} />
-          <meshBasicMaterial color="black" />
-        </mesh>
+        <group position={[0, cubeSize, 0]}>
+          <GroundLevel level={levelCount - 1} />
+        </group>
       </RigidBody>
 
       <Bird position={[0, 1.7, 0]} />
