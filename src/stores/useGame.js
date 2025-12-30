@@ -68,6 +68,16 @@ export default create(
       },
 
       /**
+       * Light
+       */
+      lightPositions: [
+        new THREE.Vector3(-4, 4, 1),
+        new THREE.Vector3(-1, 4, -4),
+        new THREE.Vector3(4, 4, -1),
+        new THREE.Vector3(1, 4, 4),
+      ],
+
+      /**
        * Phases
        */
       phase: "ready",
