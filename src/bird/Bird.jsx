@@ -302,7 +302,7 @@ export default function Bird({ position }) {
 
   return (
     <RigidBody ref={birdRef} colliders={false} canSleep={false}>
-      {/* Collider */}
+      {/* Bird collider */}
       <CuboidCollider
         position={position}
         args={[0.1, 0.35, 0.1]}
@@ -311,7 +311,7 @@ export default function Bird({ position }) {
       />
 
       <group position={position} scale={0.2}>
-        {/* Body */}
+        {/* Bird body */}
         <mesh
           geometry={sphereGeometry}
           material={birdMaterial}

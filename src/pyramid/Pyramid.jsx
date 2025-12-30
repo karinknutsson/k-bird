@@ -51,7 +51,7 @@ export function GroundLevel({ level }) {
     <group position={[0, -level * cubeSize, 0]}>
       {positions.map((p, index) => {
         return (
-          <mesh position={[p[0] * cubeSize, 0, p[2] * cubeSize]}>
+          <mesh key={index} position={[p[0] * cubeSize, 0, p[2] * cubeSize]}>
             <boxGeometry args={[cubeSize, 0.1, cubeSize]} />
             <meshBasicMaterial color="black" />
           </mesh>
