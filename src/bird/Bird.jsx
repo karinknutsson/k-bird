@@ -113,9 +113,9 @@ export default function Bird({ position }) {
     // If bird is on edge cube, jump downward
     if (birdOnEdge) {
       birdRef.current.applyImpulse({
-        x: movementRef.current.upLeft.x * 1.4,
+        x: -movementRef.current.downRight.x,
         y: 1.2,
-        z: movementRef.current.upLeft.z * 1.4,
+        z: -movementRef.current.downRight.z,
       });
     } else {
       // On non-edge cubes, jump upward
@@ -155,9 +155,9 @@ export default function Bird({ position }) {
     // If bird is on edge cube, jump downward
     if (birdOnEdge) {
       birdRef.current.applyImpulse({
-        x: movementRef.current.upRight.x * 1.4,
+        x: -movementRef.current.downLeft.x,
         y: 1.2,
-        z: movementRef.current.upRight.z * 1.4,
+        z: -movementRef.current.downLeft.z,
       });
     } else {
       // On non-edge cubes, jump upward
