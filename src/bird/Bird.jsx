@@ -295,7 +295,7 @@ export default function Bird({ position }) {
       />
 
       {/* Bird mesh */}
-      <BirdMesh position={position} />
+      <BirdMesh position={position} scale={0.2} />
     </RigidBody>
   );
 }

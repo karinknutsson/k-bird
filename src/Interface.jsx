@@ -12,10 +12,11 @@ export default function Interface() {
             <BirdMesh
               key={index}
               position={[
-                extraLivesPositions[cameraPosition].x * index * 0.5,
+                extraLivesPositions[cameraPosition].x * index * 0.4,
                 0,
-                extraLivesPositions[cameraPosition].z * index * 0.5,
+                extraLivesPositions[cameraPosition].z * index * 0.4,
               ]}
+              scale={0.14}
             />
           );
         })}
