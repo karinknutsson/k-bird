@@ -58,8 +58,7 @@ export function BirdGround({ position }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
-  const { setCubeCount, cameraPosition, extraLives, extraLivesPositions } =
-    useGame();
+  const { setCubeCount, cameraPosition, livesPositions } = useGame();
 
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
@@ -68,14 +67,14 @@ export default function Pyramid({ levelCount = 4 }) {
 
   const birdRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [lives, setLives] = useState(3);
 
   function handleAwake(index) {
     setActiveIndex(index);
-    console.log(activeIndex);
   }
 
   function handleDeath() {
-    console.log("die");
+    setLives((l) => l - 1);
   }
 
   return (
@@ -88,37 +87,42 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      {[...Array(extraLives)].map((_, index) => {
-        const inactive = activeIndex !== index;
+      <group position={[0, 4, 0]}>
+        {[...Array(lives)].map((e, index) => {
+          const inactive = activeIndex !== index;
 
-        return (
-          <group key={index}>
-            {inactive && (
-              <BirdGround
-                position={[
-                  extraLivesPositions[cameraPosition].x * index * 0.4,
-                  2.4,
-                  extraLivesPositions[cameraPosition].z * index * 0.4,
-                ]}
-                args={[cubeSize * 0.3, 0.02, cubeSize * 0.3]}
-              />
-            )}
-
-            <Bird
-              id={index}
+          return (
+            <group
+              key={index}
               position={[
-                extraLivesPositions[cameraPosition].x * index * 0.4,
-                3,
-                extraLivesPositions[cameraPosition].z * index * 0.4,
+                livesPositions[cameraPosition].x *
+                  cubeSize *
+                  (lives - index - 1),
+                -0.6,
+                livesPositions[cameraPosition].z *
+                  cubeSize *
+                  (lives - index - 1),
               ]}
-              scale={inactive ? 0.14 : 0.2}
-              active={!inactive}
-              onAwake={() => handleAwake(index)}
-              onDie={handleDeath}
-            />
-          </group>
-        );
-      })}
+            >
+              {inactive && (
+                <BirdGround
+                  position={[0, -0.6, 0]}
+                  args={[cubeSize * 0.3, 0.02, cubeSize * 0.3]}
+                />
+              )}
+
+              <Bird
+                id={index}
+                position={[0, 0, 0]}
+                scale={inactive ? 0.14 : 0.2}
+                active={!inactive}
+                onAwake={() => handleAwake(index)}
+                onDie={handleDeath}
+              />
+            </group>
+          );
+        })}
+      </group>
     </>
   );
 }

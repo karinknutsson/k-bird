@@ -198,10 +198,10 @@ export default function Bird({ id, position, scale, onAwake, onDie, active }) {
 
   // Subscribe to jump keys
   useEffect(() => {
-    if (id === 0) {
+    if (id === 2) {
       setTimeout(onAwake, 1000);
     }
-    111;
+
     if (!active) return;
 
     const unsubscribeAny = subscribeKeys(() => {
@@ -249,6 +249,8 @@ export default function Bird({ id, position, scale, onAwake, onDie, active }) {
    * Bird collision
    */
   const birdCollision = () => {
+    if (!active) return;
+
     const position = birdRef.current.translation();
 
     switch (cameraPosition) {
