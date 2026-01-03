@@ -5,7 +5,7 @@ import { useEffect, useRef, useMemo } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
 
-export default function Bird({ type, position, scale }) {
+export default function Bird({ id, position, scale, onAwake, onDie, active }) {
   const birdRef = useRef();
 
   const birdDirection = useRef("downLeft");
@@ -198,6 +198,12 @@ export default function Bird({ type, position, scale }) {
 
   // Subscribe to jump keys
   useEffect(() => {
+    if (id === 0) {
+      setTimeout(onAwake, 1000);
+    }
+    111;
+    if (!active) return;
+
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
@@ -237,7 +243,7 @@ export default function Bird({ type, position, scale }) {
       unsubscribeJumpUpRight();
       unsubscribeJumpUpLeft();
     };
-  }, []);
+  }, [active]);
 
   /**
    * Bird collision
@@ -277,12 +283,8 @@ export default function Bird({ type, position, scale }) {
     }
   };
 
-  function handleDeath() {
-    console.log("die");
-  }
-
   useFrame(() => {
-    if (birdRef && birdRef.current.translation().y < -6) handleDeath();
+    if (birdRef.current && birdRef.current.translation().y < -6) onDie();
   });
 
   return (
@@ -294,7 +296,7 @@ export default function Bird({ type, position, scale }) {
       enabledRotations={[false, true, false]}
       friction={1}
       restitution={0}
-      type={type}
+      type="dynamic"
     >
       {/* Bird collider */}
       <CuboidCollider

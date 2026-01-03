@@ -117,7 +117,7 @@ export default create(
       /**
        * Lives
        */
-      extraLives: 2,
+      extraLives: 3,
 
       extraLivesPositions: [
         new THREE.Vector3(-1, 0, 1),

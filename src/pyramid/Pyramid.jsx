@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
-import { RigidBody } from "@react-three/rapier";
+import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import Bird from "../bird/Bird";
 
 const cubeSize = 0.5;
@@ -44,20 +44,15 @@ export function CubeLevel({ level }) {
   );
 }
 
-export function GroundLevel({ level }) {
-  const positions = getCubeRing(level);
-
+export function BirdGround({ position }) {
   return (
-    <group position={[0, -level * cubeSize, 0]}>
-      {positions.map((p, index) => {
-        return (
-          <mesh key={index} position={[p[0] * cubeSize, 0, p[2] * cubeSize]}>
-            <boxGeometry args={[cubeSize, 0.1, cubeSize]} />
-            <meshBasicMaterial color="black" />
-          </mesh>
-        );
-      })}
-    </group>
+    <RigidBody type="fixed" colliders={false}>
+      <CuboidCollider
+        position={position}
+        args={[cubeSize * 0.3, 0.02, cubeSize * 0.3]}
+        mass={0.5}
+      />
+    </RigidBody>
   );
 }
 
@@ -71,9 +66,21 @@ export default function Pyramid({ levelCount = 4 }) {
     setCubeCount(totalCubes);
   }, []);
 
+  const birdRefs = useRef([]);
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  function handleAwake(index) {
+    setActiveIndex(index);
+    console.log(activeIndex);
+  }
+
+  function handleDeath() {
+    console.log("die");
+  }
+
   return (
     <>
-      <RigidBody ref={pyramidRef} type="dynamic" colliders={false} mass={0.1}>
+      <RigidBody ref={pyramidRef} colliders={false} mass={0.1}>
         <group position={[0, levelCount * cubeSize * 0.5, 0]}>
           {[...Array(levelCount)].map((_, index) => {
             return <CubeLevel key={index} level={index} />;
@@ -81,37 +88,37 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      <RigidBody type="fixed">
-        <group position={[0, cubeSize, 0]}>
-          <GroundLevel level={levelCount - 1} />
-        </group>
-      </RigidBody>
+      {[...Array(extraLives)].map((_, index) => {
+        const inactive = activeIndex !== index;
 
-      {[...Array(extraLives)].map((life, index) => {
         return (
-          <Bird
-            key={index}
-            type={"fixed"}
-            position={[
-              extraLivesPositions[cameraPosition].x * index * 0.4,
-              3,
-              extraLivesPositions[cameraPosition].z * index * 0.4,
-            ]}
-            scale={0.14}
-          />
-          // <BirdMesh
-          //   key={index}
-          //   position={[
-          //     extraLivesPositions[cameraPosition].x * index * 0.4,
-          //     0,
-          //     extraLivesPositions[cameraPosition].z * index * 0.4,
-          //   ]}
-          //   scale={0.14}
-          // />
+          <group key={index}>
+            {inactive && (
+              <BirdGround
+                position={[
+                  extraLivesPositions[cameraPosition].x * index * 0.4,
+                  2.4,
+                  extraLivesPositions[cameraPosition].z * index * 0.4,
+                ]}
+                args={[cubeSize * 0.3, 0.02, cubeSize * 0.3]}
+              />
+            )}
+
+            <Bird
+              id={index}
+              position={[
+                extraLivesPositions[cameraPosition].x * index * 0.4,
+                3,
+                extraLivesPositions[cameraPosition].z * index * 0.4,
+              ]}
+              scale={inactive ? 0.14 : 0.2}
+              active={!inactive}
+              onAwake={() => handleAwake(index)}
+              onDie={handleDeath}
+            />
+          </group>
         );
       })}
-
-      <Bird type={"dynamic"} position={[0, 1.7, 0]} scale={0.2} />
     </>
   );
 }
