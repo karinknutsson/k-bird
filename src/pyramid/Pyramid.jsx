@@ -73,6 +73,7 @@ export default function Pyramid({ levelCount = 4 }) {
   const [positions, setPositions] = useState([]);
   const [targetPositions, setTargetPositions] = useState([]);
   const groundRefs = useRef([]);
+  const livesPositionY = 3.4;
 
   function handleAwake(index) {
     setActiveIndex(index);
@@ -85,7 +86,7 @@ export default function Pyramid({ levelCount = 4 }) {
     setLives((lives) => lives - 1);
   }
 
-  function roughlyEqual(a, b, epsilon = 0.01) {
+  function isRoughlyEqual(a, b, epsilon = 0.01) {
     return Math.abs(a - b) < epsilon;
   }
 
@@ -117,12 +118,11 @@ export default function Pyramid({ levelCount = 4 }) {
         z: position.z,
       });
 
-      if (roughlyEqual(position.x, targetPositions[i].x)) {
+      if (isRoughlyEqual(position.x, targetPositions[i].x)) {
         setPositions((prev) =>
           prev.map((pos, index) => (i === index ? position : pos))
         );
         setIsMoving(false);
-        console.log("false");
         console.log(
           "index: " + i + " position: " + position.x + ", " + position.z
         );
@@ -139,7 +139,7 @@ export default function Pyramid({ levelCount = 4 }) {
     for (let i = 0; i < lives; i++) {
       currentPositions[i] = {
         x: livesPositions[cameraPosition].x * cubeSize * (lives - i - 1),
-        y: 2.4,
+        y: livesPositionY - 0.6,
         z: livesPositions[cameraPosition].z * cubeSize * (lives - i - 1),
       };
     }
@@ -151,7 +151,7 @@ export default function Pyramid({ levelCount = 4 }) {
     for (let i = 0; i < lives - 1; i++) {
       targets[i] = {
         x: livesPositions[cameraPosition].x * cubeSize * (lives - i - 2),
-        y: 2.4,
+        y: livesPositionY - 0.6,
         z: livesPositions[cameraPosition].z * cubeSize * (lives - i - 2),
       };
     }
@@ -170,7 +170,7 @@ export default function Pyramid({ levelCount = 4 }) {
       </RigidBody>
 
       {positions[0] && (
-        <group ref={birdGroup} position={[0, 3, 0]}>
+        <group ref={birdGroup} position={[0, livesPositionY, 0]}>
           {[...Array(lives)].map((_, index) => {
             const inactive = activeIndex !== index;
 
