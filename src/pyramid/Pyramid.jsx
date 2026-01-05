@@ -214,6 +214,10 @@ export default function Pyramid({ levelCount = 4 }) {
           })}
         </group>
       )}
+
+      {activePosition && (
+        <ActiveBird position={activePosition} onDie={handleDeath} />
+      )}
     </>
   );
 }

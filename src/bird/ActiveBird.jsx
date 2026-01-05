@@ -5,7 +5,7 @@ import { useEffect, useRef, useMemo } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
 
-export default function ActiveBird({ onDie }) {
+export default function ActiveBird({ position, onDie }) {
   const birdRef = useRef();
 
   const birdDirection = useRef("downLeft");
@@ -280,6 +280,12 @@ export default function ActiveBird({ onDie }) {
   useFrame(() => {
     if (birdRef.current && birdRef.current.translation().y < -6) onDie();
   });
+
+  useEffect(() => {
+    if (birdRef.current) {
+      birdRef.current.setTranslation(position, true);
+    }
+  }, [position]);
 
   return (
     <RigidBody

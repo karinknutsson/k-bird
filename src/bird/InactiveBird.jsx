@@ -17,7 +17,7 @@ export default function InactiveBird({ scale, onAwake }) {
    */
   const birdCollision = () => {
     const position = birdRef.current.translation();
-    console.log(position);
+
     if (position.y < 3) onAwake(position);
   };
 
