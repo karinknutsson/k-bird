@@ -131,10 +131,6 @@ export default function Pyramid({ levelCount = 4 }) {
           )
         );
 
-        console.log(
-          "index: " + i + " position: " + position.x + ", " + position.z
-        );
-
         if (i === 0) setIsMoving(false);
       }
     }
