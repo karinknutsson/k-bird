@@ -75,18 +75,23 @@ export default function Pyramid({ levelCount = 4 }) {
   const [isMoving, setIsMoving] = useState(false);
   const [positions, setPositions] = useState([]);
   const [targetPositions, setTargetPositions] = useState([]);
+  const [livesUsed, setLivesUsed] = useState(0);
   const groundRefs = useRef([]);
   const livesPositionY = 3.4;
 
   useEffect(() => {
     setTimeout(() => {
       setIsMoving(true);
-    }, 400);
+      console.log("isMoving has been set to true");
+      console.log("-> animation starts");
+    }, 2400);
   }, []);
 
   function handleAwake(index, position) {
+    setLivesUsed((lives) => lives + 1);
     setLives((lives) => lives - 1);
     setActivePosition(position);
+    console.log("handle awake has been triggered");
   }
 
   function handleDeath() {
@@ -143,6 +148,7 @@ export default function Pyramid({ levelCount = 4 }) {
         );
 
         if (i === 0) setIsMoving(false);
+        if (i === 0) console.log("animation ended");
       }
     }
   });
@@ -155,23 +161,37 @@ export default function Pyramid({ levelCount = 4 }) {
 
     for (let i = 0; i < lives; i++) {
       currentPositions[i] = {
-        x: livesPositions[cameraPosition].x * cubeSize * (lives - i - 1),
+        x:
+          livesPositions[cameraPosition].x *
+          cubeSize *
+          (lives - i - 1 + livesUsed),
         y: livesPositionY - 0.6,
-        z: livesPositions[cameraPosition].z * cubeSize * (lives - i - 1),
+        z:
+          livesPositions[cameraPosition].z *
+          cubeSize *
+          (lives - i - 1 + livesUsed),
       };
     }
 
     setPositions(currentPositions);
+    console.log("positions array populated");
 
     let targets = [];
 
     for (let i = 0; i < lives - 1; i++) {
       targets[i] = {
-        x: livesPositions[cameraPosition].x * cubeSize * (lives - i - 2),
+        x:
+          livesPositions[cameraPosition].x *
+          cubeSize *
+          (lives - i - 2 + livesUsed),
         y: livesPositionY - 0.6,
-        z: livesPositions[cameraPosition].z * cubeSize * (lives - i - 2),
+        z:
+          livesPositions[cameraPosition].z *
+          cubeSize *
+          (lives - i - 2 + livesUsed),
       };
     }
+    console.log("target positions array populated");
 
     setTargetPositions(targets);
   }, [cameraPosition]);
@@ -192,9 +212,13 @@ export default function Pyramid({ levelCount = 4 }) {
             const inactive = activeIndex !== index;
 
             const x =
-              livesPositions[cameraPosition].x * cubeSize * (lives - index - 1);
+              livesPositions[cameraPosition].x *
+              cubeSize *
+              (lives - index - 1 + livesUsed);
             const z =
-              livesPositions[cameraPosition].z * cubeSize * (lives - index - 1);
+              livesPositions[cameraPosition].z *
+              cubeSize *
+              (lives - index - 1 + livesUsed);
 
             return (
               <group key={index} position={[x, 0, z]}>
