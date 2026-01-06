@@ -90,7 +90,6 @@ export default function Pyramid({ levelCount = 4 }) {
   }
 
   function handleDeath() {
-    console.log("die");
     setActiveIndex((index) => index - 1);
     setActivePosition(null);
     setTimeout(() => {
