@@ -80,6 +80,11 @@ export default function Pyramid({ levelCount = 4 }) {
   const livesPositionY = 3.4;
 
   function handleAwake(index, position) {
+    if (livesUsed > 0) {
+      calculatePositions();
+      calculateTargetPositions();
+    }
+
     setLivesUsed((lives) => lives + 1);
     setLives((lives) => lives - 1);
     setActivePosition(position);
@@ -144,10 +149,7 @@ export default function Pyramid({ levelCount = 4 }) {
     }
   });
 
-  useEffect(() => {
-    const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
-    setCubeCount(totalCubes);
-
+  function calculatePositions() {
     let currentPositions = [];
 
     for (let i = 0; i < lives; i++) {
@@ -166,7 +168,9 @@ export default function Pyramid({ levelCount = 4 }) {
 
     setPositions(currentPositions);
     console.log("positions array populated");
+  }
 
+  function calculateTargetPositions() {
     let targets = [];
 
     for (let i = 0; i < lives - 1; i++) {
@@ -185,6 +189,14 @@ export default function Pyramid({ levelCount = 4 }) {
     console.log("target positions array populated");
 
     setTargetPositions(targets);
+  }
+
+  useEffect(() => {
+    const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
+    setCubeCount(totalCubes);
+
+    calculatePositions();
+    calculateTargetPositions();
   }, [cameraPosition]);
 
   return (
