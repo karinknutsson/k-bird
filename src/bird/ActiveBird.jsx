@@ -1,4 +1,8 @@
-import { CuboidCollider, RigidBody } from "@react-three/rapier";
+import {
+  CapsuleCollider,
+  CuboidCollider,
+  RigidBody,
+} from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useMemo } from "react";
@@ -206,28 +210,28 @@ export default function ActiveBird({ position, onDie }) {
       (state) => state.downLeft,
       (value) => {
         if (!isJumping && value) jumpDownLeft();
-      }
+      },
     );
 
     const unsubscribeJumpDownRight = subscribeKeys(
       (state) => state.downRight,
       (value) => {
         if (!isJumping && value) jumpDownRight();
-      }
+      },
     );
 
     const unsubscribeJumpUpRight = subscribeKeys(
       (state) => state.upRight,
       (value) => {
         if (!isJumping && value) jumpUpRight();
-      }
+      },
     );
 
     const unsubscribeJumpUpLeft = subscribeKeys(
       (state) => state.upLeft,
       (value) => {
         if (!isJumping && value) jumpUpLeft();
-      }
+      },
     );
 
     return () => {
@@ -299,8 +303,8 @@ export default function ActiveBird({ position, onDie }) {
       type="dynamic"
     >
       {/* Bird collider */}
-      <CuboidCollider
-        args={[0.1, 0.35, 0.1]}
+      <CapsuleCollider
+        args={[0.16, 0.2]}
         mass={0.5}
         onCollisionEnter={birdCollision}
       />
