@@ -80,11 +80,6 @@ export default function Pyramid({ levelCount = 4 }) {
   const livesPositionY = 3.4;
 
   function handleAwake(index, position) {
-    if (livesUsed > 0) {
-      calculatePositions();
-      calculateTargetPositions();
-    }
-
     setLivesUsed((lives) => lives + 1);
     setLives((lives) => lives - 1);
     setActivePosition(position);
@@ -98,106 +93,10 @@ export default function Pyramid({ levelCount = 4 }) {
     setActivePosition(null);
   }
 
-  function areRoughlyEqual(a, b, epsilon = 0.01) {
-    return Math.abs(a - b) < epsilon;
-  }
-
-  useFrame((_, delta) => {
-    if (!isMoving) return;
-
-    for (let i = activeIndex - 1; i > -1; i--) {
-      const position = positions[i];
-
-      position.x = THREE.MathUtils.lerp(
-        position.x,
-        targetPositions[i].x,
-        delta * 2
-      );
-      position.y = THREE.MathUtils.lerp(
-        position.y,
-        targetPositions[i].y,
-        delta * 2
-      );
-      position.z = THREE.MathUtils.lerp(
-        position.z,
-        targetPositions[i].z,
-        delta * 2
-      );
-
-      groundRefs.current[i].setNextKinematicTranslation({
-        x: position.x,
-        y: position.y,
-        z: position.z,
-      });
-
-      if (areRoughlyEqual(position.x, targetPositions[i].x)) {
-        setPositions((prev) =>
-          prev.map((pos, index) =>
-            i === index
-              ? {
-                  x: targetPositions[i].x,
-                  y: targetPositions[i].y,
-                  z: targetPositions[i].z,
-                }
-              : pos
-          )
-        );
-
-        if (i === 0) setIsMoving(false);
-        if (i === 0) console.log("animation ended");
-      }
-    }
-  });
-
-  function calculatePositions() {
-    let currentPositions = [];
-
-    for (let i = 0; i < lives; i++) {
-      currentPositions[i] = {
-        x:
-          livesPositions[cameraPosition].x *
-          cubeSize *
-          (lives - i - 1 + livesUsed),
-        y: livesPositionY - 0.6,
-        z:
-          livesPositions[cameraPosition].z *
-          cubeSize *
-          (lives - i - 1 + livesUsed),
-      };
-    }
-
-    setPositions(currentPositions);
-    console.log("positions array populated");
-  }
-
-  function calculateTargetPositions() {
-    let targets = [];
-
-    for (let i = 0; i < lives - 1; i++) {
-      targets[i] = {
-        x:
-          livesPositions[cameraPosition].x *
-          cubeSize *
-          (lives - i - 2 + livesUsed),
-        y: livesPositionY - 0.6,
-        z:
-          livesPositions[cameraPosition].z *
-          cubeSize *
-          (lives - i - 2 + livesUsed),
-      };
-    }
-    console.log("target positions array populated");
-
-    setTargetPositions(targets);
-  }
-
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
     setCubeCount(totalCubes);
-
-    calculatePositions();
-    calculateTargetPositions();
-  }, [cameraPosition]);
+  }, []);
 
   return (
     <>
@@ -209,41 +108,29 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      {positions[0] && (
-        <group ref={birdGroup} position={[0, livesPositionY, 0]}>
-          {[...Array(lives)].map((_, index) => {
-            const inactive = activeIndex !== index;
+      <group ref={birdGroup} position={[0, livesPositionY, 0]}>
+        {[...Array(lives)].map((_, index) => {
+          const inactive = activeIndex !== index;
 
-            const x =
-              livesPositions[cameraPosition].x *
-              cubeSize *
-              (lives - index - 1 + livesUsed);
-            const z =
-              livesPositions[cameraPosition].z *
-              cubeSize *
-              (lives - index - 1 + livesUsed);
+          const x =
+            livesPositions[cameraPosition].x *
+            cubeSize *
+            (lives - index - 1 + livesUsed);
+          const z =
+            livesPositions[cameraPosition].z *
+            cubeSize *
+            (lives - index - 1 + livesUsed);
 
-            return (
-              <group key={index} position={[x, 0, z]}>
-                {inactive && (
-                  <group position={[0, -0.6, 0]}>
-                    <BirdGround
-                      groundRef={(e) => (groundRefs.current[index] = e)}
-                      position={[0, -0.6, 0]}
-                      args={[cubeSize * 0.3, 0.02, cubeSize * 0.3]}
-                    />
-                  </group>
-                )}
-
-                <InactiveBird
-                  scale={inactive ? 0.14 : 0.2}
-                  onAwake={(position) => handleAwake(index, position)}
-                />
-              </group>
-            );
-          })}
-        </group>
-      )}
+          return (
+            <group key={index} position={[x, 0, z]}>
+              <InactiveBird
+                scale={inactive ? 0.14 : 0.2}
+                onAwake={(position) => handleAwake(index, position)}
+              />
+            </group>
+          );
+        })}
+      </group>
 
       {activePosition && (
         <ActiveBird position={activePosition} onDie={handleDeath} />

@@ -28,7 +28,7 @@ export default function InactiveBird({ scale, onAwake }) {
       enabledRotations={[false, true, false]}
       friction={2}
       restitution={0}
-      type="dynamic"
+      type="kinematicPosition"
     >
       {/* Bird collider */}
       <CapsuleCollider
