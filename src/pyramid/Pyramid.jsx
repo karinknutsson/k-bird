@@ -106,14 +106,14 @@ export default function Pyramid({ levelCount = 4 }) {
             (lives - index - 1 + livesUsed);
 
           return (
-            <group key={index} position={[x, 0, z]}>
-              <InactiveBird
-                // scale={inactive ? 0.14 : 0.2}
-                scale={0.14}
-                onAwake={(position) => handleAwake(index, position)}
-                bodyType={inactive ? "kinematicPosition" : "dynamic"}
-              />
-            </group>
+            <InactiveBird
+              key={index}
+              position={[x, 0, z]}
+              // scale={inactive ? 0.14 : 0.2}
+              scale={0.14}
+              onAwake={(position) => handleAwake(index, position)}
+              bodyType={inactive ? "kinematicPosition" : "dynamic"}
+            />
           );
         })}
       </group>
