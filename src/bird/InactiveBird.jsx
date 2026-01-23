@@ -1,12 +1,8 @@
-import {
-  CapsuleCollider,
-  CuboidCollider,
-  RigidBody,
-} from "@react-three/rapier";
+import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useRef } from "react";
 import BirdMesh from "./BirdMesh";
 
-export default function InactiveBird({ scale, onAwake }) {
+export default function InactiveBird({ scale, onAwake, bodyType }) {
   const birdRef = useRef();
 
   /**
@@ -28,7 +24,7 @@ export default function InactiveBird({ scale, onAwake }) {
       enabledRotations={[false, true, false]}
       friction={2}
       restitution={0}
-      type="kinematicPosition"
+      type={bodyType}
     >
       {/* Bird collider */}
       <CapsuleCollider

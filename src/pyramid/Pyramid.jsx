@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import Bird from "../bird/Bird";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import InactiveBird from "../bird/InactiveBird";
@@ -48,22 +47,6 @@ export function CubeLevel({ level }) {
   );
 }
 
-export function BirdGround({ groundRef }) {
-  return (
-    <RigidBody
-      ref={groundRef}
-      type="kinematicPosition"
-      colliders={false}
-      friction={2}
-    >
-      <CuboidCollider
-        args={[cubeSize * 0.3, 0.02, cubeSize * 0.3]}
-        mass={0.5}
-      />
-    </RigidBody>
-  );
-}
-
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
   const { setCubeCount, cameraPosition, livesPositions } = useGame();
@@ -73,29 +56,30 @@ export default function Pyramid({ levelCount = 4 }) {
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [activePosition, setActivePosition] = useState();
   const [isMoving, setIsMoving] = useState(false);
-  const [positions, setPositions] = useState([]);
-  const [targetPositions, setTargetPositions] = useState([]);
   const [livesUsed, setLivesUsed] = useState(0);
-  const groundRefs = useRef([]);
   const livesPositionY = 3.4;
 
-  function handleAwake(index, position) {
-    setLivesUsed((lives) => lives + 1);
-    setLives((lives) => lives - 1);
+  function handleAwake(_, position) {
+    setLivesUsed((prev) => prev + 1);
+    setLives((prev) => prev - 1);
     setActivePosition(position);
     console.log("handle awake has been triggered");
     setIsMoving(true);
     console.log("isMoving has been set to true");
   }
 
+  // function triggerNextBird() {}
+
   function handleDeath() {
-    setActiveIndex((index) => index - 1);
+    setActiveIndex((prev) => prev - 1);
     setActivePosition(null);
   }
 
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
     setCubeCount(totalCubes);
+
+    // setTimeout(() => triggerNextBird(), 2000);
   }, []);
 
   return (
@@ -124,8 +108,10 @@ export default function Pyramid({ levelCount = 4 }) {
           return (
             <group key={index} position={[x, 0, z]}>
               <InactiveBird
-                scale={inactive ? 0.14 : 0.2}
+                // scale={inactive ? 0.14 : 0.2}
+                scale={0.14}
                 onAwake={(position) => handleAwake(index, position)}
+                bodyType={inactive ? "kinematicPosition" : "dynamic"}
               />
             </group>
           );

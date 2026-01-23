@@ -1,8 +1,4 @@
-import {
-  CapsuleCollider,
-  CuboidCollider,
-  RigidBody,
-} from "@react-three/rapier";
+import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useMemo } from "react";
@@ -304,7 +300,7 @@ export default function ActiveBird({ position, onDie }) {
     >
       {/* Bird collider */}
       <CapsuleCollider
-        args={[0.16, 0.2]}
+        args={[0.18, 0.16]}
         mass={0.5}
         onCollisionEnter={birdCollision}
       />
