@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
-import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import { RigidBody } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import InactiveBird from "../bird/InactiveBird";
@@ -55,17 +55,33 @@ export default function Pyramid({ levelCount = 4 }) {
   const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [activePosition, setActivePosition] = useState();
-  const [isMoving, setIsMoving] = useState(false);
+  // const [isMoving, setIsMoving] = useState(false);
   const [livesUsed, setLivesUsed] = useState(0);
+  // const [birdPositions, setBirdPositions] = useState(calculateBirdPositions());
   const livesPositionY = 3.4;
+  // let birdPositions = calculateBirdPositions();
+  console.log("pyramid render");
+
+  const birdPositions = useMemo(
+    () => calculateBirdPositions(),
+    [lives, cameraPosition, livesPositions],
+  );
 
   function handleAwake(_, position) {
-    setLivesUsed((prev) => prev + 1);
-    setLives((prev) => prev - 1);
+    setLivesUsed((prev) => {
+      console.log(`lives used set to ${prev + 1}`);
+      return prev + 1;
+    });
+
+    setLives((prev) => {
+      console.log(`lives used set to ${prev - 1}`);
+      return prev - 1;
+    });
+
     setActivePosition(position);
-    console.log("handle awake has been triggered");
-    setIsMoving(true);
-    console.log("isMoving has been set to true");
+    // console.log("handle awake has been triggered");
+    // setIsMoving(true);
+    // console.log("isMoving has been set to true");
   }
 
   // function triggerNextBird() {}
@@ -74,6 +90,24 @@ export default function Pyramid({ levelCount = 4 }) {
     setActiveIndex((prev) => prev - 1);
     setActivePosition(null);
   }
+
+  function calculateBirdPositions() {
+    const positions = [];
+
+    for (let i = 0; i < lives; i++) {
+      const x =
+        livesPositions[cameraPosition].x * cubeSize * (lives - i - 1.00001);
+      const z =
+        livesPositions[cameraPosition].z * cubeSize * (lives - i - 1.00001);
+
+      positions.push({ x, y: 0, z });
+    }
+
+    console.log(positions);
+    return positions;
+  }
+
+  function moveBirdPositions() {}
 
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
@@ -96,20 +130,10 @@ export default function Pyramid({ levelCount = 4 }) {
         {[...Array(lives)].map((_, index) => {
           const inactive = activeIndex !== index;
 
-          const x =
-            livesPositions[cameraPosition].x *
-            cubeSize *
-            (lives - index - 1 + livesUsed);
-          const z =
-            livesPositions[cameraPosition].z *
-            cubeSize *
-            (lives - index - 1 + livesUsed);
-
           return (
             <InactiveBird
-              key={index}
-              position={[x, 0, z]}
-              // scale={inactive ? 0.14 : 0.2}
+              key={`${index}-${livesUsed}`}
+              position={[birdPositions[index].x, 0, birdPositions[index].z]}
               scale={0.14}
               onAwake={(position) => handleAwake(index, position)}
               bodyType={inactive ? "kinematicPosition" : "dynamic"}
