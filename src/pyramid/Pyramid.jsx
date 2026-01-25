@@ -2,8 +2,6 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
 import { RigidBody } from "@react-three/rapier";
-import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 import InactiveBird from "../bird/InactiveBird";
 import ActiveBird from "../bird/ActiveBird";
 
@@ -55,12 +53,8 @@ export default function Pyramid({ levelCount = 4 }) {
   const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [activePosition, setActivePosition] = useState();
-  // const [isMoving, setIsMoving] = useState(false);
   const [livesUsed, setLivesUsed] = useState(0);
-  // const [birdPositions, setBirdPositions] = useState(calculateBirdPositions());
-  const livesPositionY = 3.4;
-  // let birdPositions = calculateBirdPositions();
-  console.log("pyramid render");
+  const livesPositionY = 3;
 
   const birdPositions = useMemo(
     () => calculateBirdPositions(),
@@ -68,23 +62,12 @@ export default function Pyramid({ levelCount = 4 }) {
   );
 
   function handleAwake(_, position) {
-    setLivesUsed((prev) => {
-      console.log(`lives used set to ${prev + 1}`);
-      return prev + 1;
-    });
+    setLivesUsed((prev) => prev + 1);
 
-    setLives((prev) => {
-      console.log(`lives used set to ${prev - 1}`);
-      return prev - 1;
-    });
+    setLives((prev) => prev - 1);
 
     setActivePosition(position);
-    // console.log("handle awake has been triggered");
-    // setIsMoving(true);
-    // console.log("isMoving has been set to true");
   }
-
-  // function triggerNextBird() {}
 
   function handleDeath() {
     setActiveIndex((prev) => prev - 1);
@@ -103,17 +86,12 @@ export default function Pyramid({ levelCount = 4 }) {
       positions.push({ x, y: 0, z });
     }
 
-    console.log(positions);
     return positions;
   }
-
-  function moveBirdPositions() {}
 
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
     setCubeCount(totalCubes);
-
-    // setTimeout(() => triggerNextBird(), 2000);
   }, []);
 
   return (
