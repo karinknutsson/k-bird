@@ -11,10 +11,10 @@ root.render(
   <>
     <KeyboardControls
       map={[
-        { name: "upLeft", keys: ["Numpad7", "KeyW"] },
-        { name: "upRight", keys: ["Numpad9", "KeyR"] },
-        { name: "downLeft", keys: ["Numpad1", "KeyX"] },
-        { name: "downRight", keys: ["Numpad3", "KeyV"] },
+        { name: "upLeft", keys: ["Numpad7", "KeyQ"] },
+        { name: "upRight", keys: ["Numpad9", "KeyE"] },
+        { name: "downLeft", keys: ["Numpad1", "KeyZ"] },
+        { name: "downRight", keys: ["Numpad3", "KeyC"] },
       ]}
     >
       <Canvas
@@ -33,5 +33,5 @@ root.render(
         <Experience />
       </Canvas>
     </KeyboardControls>
-  </>
+  </>,
 );

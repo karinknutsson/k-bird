@@ -1,34 +1,11 @@
-import { CuboidCollider, RigidBody } from "@react-three/rapier";
-import * as THREE from "three";
+import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useMemo } from "react";
 import useGame from "../stores/useGame";
+import BirdMesh from "./BirdMesh";
 
-/**
- * Geometry
- */
-const sphereGeometry = new THREE.IcosahedronGeometry(1, 30);
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const coneGeometry = new THREE.ConeGeometry(1, 1, 4, 1);
-
-const topFeatherGeometry = new THREE.BoxGeometry(0.2, 0.8, 1);
-const topFeatherMatrix = new THREE.Matrix4();
-topFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.8);
-topFeatherGeometry.applyMatrix4(topFeatherMatrix);
-
-const bottomFeatherGeometry = new THREE.BoxGeometry(0.2, 0.3, 1);
-const bottomFeatherMatrix = new THREE.Matrix4();
-bottomFeatherMatrix.makeShear(0, 0, 0, 0, 0, -0.3);
-bottomFeatherGeometry.applyMatrix4(bottomFeatherMatrix);
-
-/**
- * Material
- */
-const birdMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff" });
-const detailMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
-const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
-
-export default function Bird({ position }) {
+export default function ActiveBird({ position, onDie }) {
   const birdRef = useRef();
 
   const birdDirection = useRef("downLeft");
@@ -229,28 +206,28 @@ export default function Bird({ position }) {
       (state) => state.downLeft,
       (value) => {
         if (!isJumping && value) jumpDownLeft();
-      }
+      },
     );
 
     const unsubscribeJumpDownRight = subscribeKeys(
       (state) => state.downRight,
       (value) => {
         if (!isJumping && value) jumpDownRight();
-      }
+      },
     );
 
     const unsubscribeJumpUpRight = subscribeKeys(
       (state) => state.upRight,
       (value) => {
         if (!isJumping && value) jumpUpRight();
-      }
+      },
     );
 
     const unsubscribeJumpUpLeft = subscribeKeys(
       (state) => state.upLeft,
       (value) => {
         if (!isJumping && value) jumpUpLeft();
-      }
+      },
     );
 
     return () => {
@@ -300,6 +277,16 @@ export default function Bird({ position }) {
     }
   };
 
+  useFrame(() => {
+    if (birdRef.current && birdRef.current.translation().y < -6) onDie();
+  });
+
+  useEffect(() => {
+    if (birdRef.current) {
+      birdRef.current.setTranslation(position, true);
+    }
+  }, [position]);
+
   return (
     <RigidBody
       ref={birdRef}
@@ -307,126 +294,19 @@ export default function Bird({ position }) {
       canSleep={false}
       angularDamping={1}
       enabledRotations={[false, true, false]}
-      friction={1}
+      friction={2}
       restitution={0}
+      type="dynamic"
     >
       {/* Bird collider */}
-      <CuboidCollider
-        position={position}
-        args={[0.1, 0.35, 0.1]}
+      <CapsuleCollider
+        args={[0.18, 0.16]}
         mass={0.5}
         onCollisionEnter={birdCollision}
       />
 
-      <group position={position} scale={0.2}>
-        {/* Bird body */}
-        <mesh
-          geometry={sphereGeometry}
-          material={birdMaterial}
-          scale={[1, 0.85, 0.85]}
-        />
-
-        {/* Eyes */}
-        <group position={[0, 0.4, 0.78]}>
-          <mesh
-            geometry={sphereGeometry}
-            material={eyeMaterial}
-            position={[0.3, 0, 0]}
-            scale={[0.11, 0.11, 0.11]}
-          />
-          <mesh
-            geometry={sphereGeometry}
-            material={eyeMaterial}
-            position={[-0.3, 0, 0]}
-            scale={[0.11, 0.11, 0.11]}
-          />
-        </group>
-
-        {/* Beek */}
-        <mesh
-          geometry={coneGeometry}
-          material={detailMaterial}
-          position={[0, -0.3, 1.26]}
-          scale={[0.4, 1.2, 0.4]}
-          rotation={[Math.PI * 0.6, 0, 0]}
-        />
-
-        {/* Feathers */}
-        <group position={[0, 0.1, -1]}>
-          <mesh
-            geometry={topFeatherGeometry}
-            material={birdMaterial}
-            position={[0, 0.3, 0]}
-          />
-          <mesh
-            geometry={bottomFeatherGeometry}
-            material={birdMaterial}
-            position={[0, -0.2, 0]}
-          />
-        </group>
-
-        {/* Left leg */}
-        <group position={[0.4, 0.1, 0]}>
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[0, -1.3, 0]}
-            scale={[0.1, 1, 0.1]}
-          />
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[0.17, -1.8, 0.14]}
-            scale={[0.1, 0.1, 0.4]}
-            rotation={[0, Math.PI * 0.25, 0]}
-          />
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[0, -1.8, 0.15]}
-            scale={[0.1, 0.1, 0.4]}
-            rotation={[0, 0, 0]}
-          />
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[-0.17, -1.8, 0.14]}
-            scale={[0.1, 0.1, 0.4]}
-            rotation={[0, -Math.PI * 0.25, 0]}
-          />
-        </group>
-
-        {/* Right leg */}
-        <group position={[-0.4, 0.1, 0]}>
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[0, -1.3, 0]}
-            scale={[0.1, 1, 0.1]}
-          />
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[0.17, -1.8, 0.14]}
-            scale={[0.1, 0.1, 0.4]}
-            rotation={[0, Math.PI * 0.25, 0]}
-          />
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[0, -1.8, 0.15]}
-            scale={[0.1, 0.1, 0.4]}
-            rotation={[0, 0, 0]}
-          />
-          <mesh
-            geometry={boxGeometry}
-            material={detailMaterial}
-            position={[-0.17, -1.8, 0.14]}
-            scale={[0.1, 0.1, 0.4]}
-            rotation={[0, -Math.PI * 0.25, 0]}
-          />
-        </group>
-      </group>
+      {/* Bird mesh */}
+      <BirdMesh scale={0.2} />
     </RigidBody>
   );
 }

@@ -30,7 +30,6 @@ export default create(
       /**
        * Camera
        */
-
       isCameraMoving: false,
       cameraPosition: 0,
 
@@ -49,8 +48,8 @@ export default create(
                 ? 0
                 : state.cameraPosition + 1
               : state.cameraPosition === 0
-              ? 3
-              : state.cameraPosition - 1;
+                ? 3
+                : state.cameraPosition - 1;
 
           return {
             isCameraMoving: true,
@@ -93,6 +92,17 @@ export default create(
         });
       },
 
+      ready: () => {
+        set((state) => {
+          if (state.phase === "playing")
+            return {
+              phase: "ready",
+            };
+
+          return {};
+        });
+      },
+
       restart: () => {
         set((state) => {
           if (state.phase === "playing" || state.phase === "ended")
@@ -114,6 +124,26 @@ export default create(
           return {};
         });
       },
+
+      /**
+       * Lives
+       */
+      lives: 3,
+
+      livesPositions: [
+        new THREE.Vector3(-1, 0, 1),
+        new THREE.Vector3(-1, 0, -1),
+        new THREE.Vector3(1, 0, -1),
+        new THREE.Vector3(1, 0, 1),
+      ],
+
+      decrementLives: () => {
+        set((state) => {
+          return {
+            extraLives: state.lives - 1,
+          };
+        });
+      },
     };
-  })
+  }),
 );

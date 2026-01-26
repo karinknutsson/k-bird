@@ -12,7 +12,7 @@ export default function CameraController() {
 
     if (isCameraMoving) {
       const targetPosition = cameraPositions[cameraPosition];
-      camera.position.lerp(targetPosition, 5 * delta);
+      camera.position.lerp(targetPosition, delta * 5);
 
       const target = new THREE.Vector3(0, 0, 0);
       camera.lookAt(target);
