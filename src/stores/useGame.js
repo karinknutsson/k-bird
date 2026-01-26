@@ -27,6 +27,16 @@ export default create(
         });
       },
 
+      currentCubePosition: null,
+
+      setCurrentCubePosition: (position) => {
+        set((_) => {
+          return {
+            cubePosition: position,
+          };
+        });
+      },
+
       /**
        * Camera
        */

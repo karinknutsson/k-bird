@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import useGame from "../stores/useGame";
@@ -13,6 +13,10 @@ export default function Cube({ size, position }) {
 
   const phase = useGame((state) => state.phase);
   const incrementCubeHits = useGame((state) => state.incrementCubeHits);
+  const currentCubePosition = useGame((state) => state.currentCubePosition);
+  const setCurrentCubePosition = useGame(
+    (state) => state.setCurrentCubePosition,
+  );
 
   /**
    * Change color on hit
@@ -20,7 +24,9 @@ export default function Cube({ size, position }) {
   const handleHitCube = () => {
     if (phase === "playing") {
       if (!isTouched) incrementCubeHits();
+
       setIsTouched(true);
+      setCurrentCubePosition(position);
     }
   };
 

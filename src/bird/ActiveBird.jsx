@@ -1,4 +1,8 @@
-import { CapsuleCollider, RigidBody } from "@react-three/rapier";
+import {
+  CapsuleCollider,
+  RigidBody,
+  CuboidCollider,
+} from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useMemo } from "react";
@@ -19,8 +23,8 @@ export default function ActiveBird({ position, onDie }) {
   /**
    * Jump functionality
    */
-  const downwardMovement = 0.38466;
-  const upwardMovement = 0.28795;
+  const downwardMovement = 0.38462;
+  const upwardMovement = 0.28799;
 
   // Movement directions
   const movement = useMemo(() => {
@@ -249,6 +253,7 @@ export default function ActiveBird({ position, onDie }) {
    */
   const birdCollision = () => {
     const position = birdRef.current.translation();
+    console.log("bird x: " + position.x + ", bird z: " + position.z);
 
     switch (cameraPosition) {
       case 0:
@@ -305,9 +310,14 @@ export default function ActiveBird({ position, onDie }) {
     >
       {/* Bird collider */}
       <CapsuleCollider
-        args={[0.18, 0.16]}
+        args={[0.18, 0.18]}
         mass={0.5}
         onCollisionEnter={birdCollision}
+      />
+      <CuboidCollider
+        args={[0.12, 0.02, 0.12]}
+        position={[0, -0.34, 0]}
+        restitution={0}
       />
 
       {/* Bird mesh */}
