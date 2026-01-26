@@ -1,8 +1,4 @@
-import {
-  CapsuleCollider,
-  RigidBody,
-  CuboidCollider,
-} from "@react-three/rapier";
+import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useMemo } from "react";
@@ -14,7 +10,7 @@ export default function ActiveBird({ position, onDie }) {
 
   const birdDirection = useRef("downLeft");
   const [subscribeKeys] = useKeyboardControls();
-  let isJumping = false;
+  let isJumping = true;
 
   const start = useGame((state) => state.start);
   const cameraPosition = useGame((state) => state.cameraPosition);
@@ -207,6 +203,8 @@ export default function ActiveBird({ position, onDie }) {
 
   // Subscribe to jump keys
   useEffect(() => {
+    setIsJumping(false);
+
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
