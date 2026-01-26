@@ -19,7 +19,7 @@ export default function InactiveBird({ position, scale, onAwake, bodyType }) {
       ref={birdRef}
       colliders={false}
       canSleep={false}
-      angularDamping={1}
+      angularDamping={4}
       enabledRotations={[false, true, false]}
       friction={2}
       restitution={0}
