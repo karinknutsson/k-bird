@@ -51,12 +51,10 @@ export default function Pyramid({ levelCount = 4 }) {
   const { setCubeCount, cameraPosition, livesPositions, phase, end } =
     useGame();
 
-  const textRef = useRef();
   const birdGroup = useRef();
-  const [lives, setLives] = useState(1);
+  const [lives, setLives] = useState(3);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [activePosition, setActivePosition] = useState();
-  const [livesUsed, setLivesUsed] = useState(0);
   const livesPositionY = 3;
 
   const birdPositions = useMemo(
@@ -65,10 +63,7 @@ export default function Pyramid({ levelCount = 4 }) {
   );
 
   function handleAwake(_, position) {
-    setLivesUsed((prev) => prev + 1);
-
     setLives((prev) => prev - 1);
-
     setActivePosition(position);
   }
 
@@ -119,7 +114,7 @@ export default function Pyramid({ levelCount = 4 }) {
 
           return (
             <InactiveBird
-              key={`${index}-${livesUsed}`}
+              key={`${index}-${lives}`}
               position={[birdPositions[index].x, 0, birdPositions[index].z]}
               scale={0.14}
               onAwake={(position) => handleAwake(index, position)}
