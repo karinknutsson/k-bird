@@ -4,7 +4,7 @@ import useGame from "../stores/useGame";
 import { RigidBody } from "@react-three/rapier";
 import InactiveBird from "../bird/InactiveBird";
 import ActiveBird from "../bird/ActiveBird";
-import { Text } from "@react-three/drei";
+import gsap from "gsap";
 
 const cubeSize = 0.5;
 
@@ -75,6 +75,8 @@ export default function Pyramid({ levelCount = 4 }) {
   function handleDeath() {
     if (activeIndex === 0) {
       end();
+
+      gsap.to(".game-over-container", { opacity: 1, duration: 0.5 });
     } else {
       setActiveIndex((prev) => prev - 1);
       setActivePosition(null);

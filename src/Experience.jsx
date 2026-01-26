@@ -8,8 +8,8 @@ export default function Experience() {
     <>
       <OrbitControls />
 
-      <Physics debug>
-        {/* <Physics> */}
+      {/* <Physics debug> */}
+      <Physics>
         {/* <Interface /> */}
         <Lights />
         <Pyramid />
