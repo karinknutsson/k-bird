@@ -73,6 +73,8 @@ export default function ActiveBird({ position, onDie }) {
     }
   };
 
+  const quarterTurn = 0.035;
+
   // Jump up left
   const jumpUpLeft = () => {
     setIsJumping(true);
@@ -104,11 +106,11 @@ export default function ActiveBird({ position, onDie }) {
     }
 
     if (birdDirection.current === "downLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.012, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -2 * quarterTurn, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     }
 
     birdDirection.current = birdOnEdge ? "downLeft" : "upLeft";
@@ -146,11 +148,11 @@ export default function ActiveBird({ position, onDie }) {
     }
 
     if (birdDirection.current === "downLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 2 * quarterTurn, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     }
 
     birdDirection.current = birdOnEdge ? "downRight" : "upRight";
@@ -167,11 +169,11 @@ export default function ActiveBird({ position, onDie }) {
     });
 
     if (birdDirection.current === "downRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.016, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -2 * quarterTurn, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     }
 
     birdDirection.current = "downLeft";
@@ -188,11 +190,11 @@ export default function ActiveBird({ position, onDie }) {
     });
 
     if (birdDirection.current === "downLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.016, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 2 * quarterTurn, z: 0 });
     }
 
     birdDirection.current = "downRight";
