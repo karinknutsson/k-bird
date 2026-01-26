@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "Sixtyfour";
+  src:
+    url("/sixtyfour.woff2") format("woff2"),
+    url("/sixtyfour.woff") format("woff");
+  font-style: normal;
+  font-display: block;
+}
+
 html,
 body,
 #root {
@@ -7,4 +16,25 @@ body,
   width: 100%;
   height: 100%;
   background: black;
+  margin: 0;
+  padding: 0;
+}
+
+.interface-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+}
+
+.game-over-wrapper {
+  color: white;
+  font-family: "Sixtyfour", monospace;
+  font-size: 5rem;
 }

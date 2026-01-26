@@ -51,6 +51,7 @@ export default function Pyramid({ levelCount = 4 }) {
   const { setCubeCount, cameraPosition, livesPositions, phase, end } =
     useGame();
 
+  const textRef = useRef();
   const birdGroup = useRef();
   const [lives, setLives] = useState(1);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
@@ -129,8 +130,6 @@ export default function Pyramid({ levelCount = 4 }) {
       {phase !== "ended" && activePosition && (
         <ActiveBird position={activePosition} onDie={handleDeath} />
       )}
-
-      {phase === "ended" && <Text>GAME OVER</Text>}
     </>
   );
 }
