@@ -48,8 +48,15 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
-  const { setCubeCount, cameraPosition, livesPositions, phase, ready, end } =
-    useGame();
+  const {
+    setCubeCount,
+    cameraPosition,
+    livesPositions,
+    livesRotationY,
+    phase,
+    ready,
+    end,
+  } = useGame();
 
   const birdGroup = useRef();
   const [lives, setLives] = useState(3);
@@ -117,6 +124,7 @@ export default function Pyramid({ levelCount = 4 }) {
             <InactiveBird
               key={`${index}-${lives}`}
               position={[birdPositions[index].x, 0, birdPositions[index].z]}
+              rotationY={livesRotationY[cameraPosition]}
               scale={0.14}
               onAwake={(position) => handleAwake(index, position)}
               bodyType={inactive ? "kinematicPosition" : "dynamic"}
