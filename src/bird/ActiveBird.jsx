@@ -321,11 +321,6 @@ export default function ActiveBird({ position, onDie }) {
         mass={0.5}
         onCollisionEnter={birdCollision}
       />
-      {/* <CuboidCollider
-        args={[0.12, 0.02, 0.12]}
-        position={[0, -0.34, 0]}
-        restitution={0}
-      /> */}
 
       {/* Bird mesh */}
       <BirdMesh scale={0.2} />
