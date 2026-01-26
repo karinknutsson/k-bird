@@ -8,9 +8,8 @@ export default function Experience() {
     <>
       <OrbitControls />
 
-      <Physics debug numSolverIterations={8}>
-        {/* <Physics> */}
-        {/* <Interface /> */}
+      {/* <Physics debug> */}
+      <Physics>
         <Lights />
         <Pyramid />
       </Physics>

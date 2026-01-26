@@ -253,7 +253,16 @@ export default function ActiveBird({ position, onDie }) {
    */
   const birdCollision = () => {
     const position = birdRef.current.translation();
-    console.log("bird x: " + position.x + ", bird z: " + position.z);
+
+    birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    birdRef.current.setTranslation(
+      {
+        x: Math.round(position.x * 10) / 10,
+        y: position.y,
+        z: Math.round(position.z * 10) / 10,
+      },
+      true,
+    );
 
     switch (cameraPosition) {
       case 0:
@@ -310,15 +319,15 @@ export default function ActiveBird({ position, onDie }) {
     >
       {/* Bird collider */}
       <CapsuleCollider
-        args={[0.18, 0.18]}
+        args={[0.19, 0.16]}
         mass={0.5}
         onCollisionEnter={birdCollision}
       />
-      <CuboidCollider
+      {/* <CuboidCollider
         args={[0.12, 0.02, 0.12]}
         position={[0, -0.34, 0]}
         restitution={0}
-      />
+      /> */}
 
       {/* Bird mesh */}
       <BirdMesh scale={0.2} />

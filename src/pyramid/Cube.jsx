@@ -13,20 +13,14 @@ export default function Cube({ size, position }) {
 
   const phase = useGame((state) => state.phase);
   const incrementCubeHits = useGame((state) => state.incrementCubeHits);
-  const currentCubePosition = useGame((state) => state.currentCubePosition);
-  const setCurrentCubePosition = useGame(
-    (state) => state.setCurrentCubePosition,
-  );
 
   /**
    * Change color on hit
    */
   const handleHitCube = () => {
     if (phase === "playing") {
-      if (!isTouched) incrementCubeHits();
-
       setIsTouched(true);
-      setCurrentCubePosition(position);
+      if (!isTouched) incrementCubeHits();
     }
   };
 
