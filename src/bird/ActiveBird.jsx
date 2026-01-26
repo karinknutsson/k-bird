@@ -10,7 +10,7 @@ export default function ActiveBird({ position, onDie }) {
 
   const birdDirection = useRef("downLeft");
   const [subscribeKeys] = useKeyboardControls();
-  let isJumping = false;
+  let isJumping = true;
 
   const start = useGame((state) => state.start);
   const cameraPosition = useGame((state) => state.cameraPosition);
@@ -19,36 +19,39 @@ export default function ActiveBird({ position, onDie }) {
   /**
    * Jump functionality
    */
+  const downwardMovement = 0.38462;
+  const upwardMovement = 0.28799;
+
   // Movement directions
   const movement = useMemo(() => {
     switch (cameraPosition) {
       case 0:
         return {
-          upLeft: { x: -0.29, z: 0 },
-          upRight: { x: 0, z: -0.29 },
-          downLeft: { x: 0, z: 0.39 },
-          downRight: { x: 0.39, z: 0 },
+          upLeft: { x: -upwardMovement, z: 0 },
+          upRight: { x: 0, z: -upwardMovement },
+          downLeft: { x: 0, z: downwardMovement },
+          downRight: { x: downwardMovement, z: 0 },
         };
       case 1:
         return {
-          upLeft: { x: 0, z: -0.29 },
-          upRight: { x: 0.29, z: 0 },
-          downLeft: { x: -0.39, z: 0 },
-          downRight: { x: 0, z: 0.39 },
+          upLeft: { x: 0, z: -upwardMovement },
+          upRight: { x: upwardMovement, z: 0 },
+          downLeft: { x: -downwardMovement, z: 0 },
+          downRight: { x: 0, z: downwardMovement },
         };
       case 2:
         return {
-          upLeft: { x: 0.29, z: 0 },
-          upRight: { x: 0, z: 0.29 },
-          downLeft: { x: 0, z: -0.39 },
-          downRight: { x: -0.39, z: 0 },
+          upLeft: { x: upwardMovement, z: 0 },
+          upRight: { x: 0, z: upwardMovement },
+          downLeft: { x: 0, z: -downwardMovement },
+          downRight: { x: -downwardMovement, z: 0 },
         };
       case 3:
         return {
-          upLeft: { x: 0, z: 0.29 },
-          upRight: { x: -0.29, z: 0 },
-          downLeft: { x: 0.39, z: 0 },
-          downRight: { x: 0, z: -0.39 },
+          upLeft: { x: 0, z: upwardMovement },
+          upRight: { x: -upwardMovement, z: 0 },
+          downLeft: { x: downwardMovement, z: 0 },
+          downRight: { x: 0, z: -downwardMovement },
         };
     }
   }, [cameraPosition]);
@@ -69,6 +72,8 @@ export default function ActiveBird({ position, onDie }) {
       }, ms);
     }
   };
+
+  const quarterTurn = 0.035;
 
   // Jump up left
   const jumpUpLeft = () => {
@@ -101,11 +106,11 @@ export default function ActiveBird({ position, onDie }) {
     }
 
     if (birdDirection.current === "downLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.012, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -2 * quarterTurn, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     }
 
     birdDirection.current = birdOnEdge ? "downLeft" : "upLeft";
@@ -143,11 +148,11 @@ export default function ActiveBird({ position, onDie }) {
     }
 
     if (birdDirection.current === "downLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.012, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 2 * quarterTurn, z: 0 });
     } else if (birdDirection.current === "downRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.0064, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     }
 
     birdDirection.current = birdOnEdge ? "downRight" : "upRight";
@@ -164,11 +169,11 @@ export default function ActiveBird({ position, onDie }) {
     });
 
     if (birdDirection.current === "downRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.016, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -2 * quarterTurn, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     }
 
     birdDirection.current = "downLeft";
@@ -185,11 +190,11 @@ export default function ActiveBird({ position, onDie }) {
     });
 
     if (birdDirection.current === "downLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: quarterTurn, z: 0 });
     } else if (birdDirection.current === "upRight") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: -0.008, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: -quarterTurn, z: 0 });
     } else if (birdDirection.current === "upLeft") {
-      birdRef.current.applyTorqueImpulse({ x: 0, y: 0.016, z: 0 });
+      birdRef.current.applyTorqueImpulse({ x: 0, y: 2 * quarterTurn, z: 0 });
     }
 
     birdDirection.current = "downRight";
@@ -198,6 +203,8 @@ export default function ActiveBird({ position, onDie }) {
 
   // Subscribe to jump keys
   useEffect(() => {
+    setIsJumping(false);
+
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
@@ -244,6 +251,16 @@ export default function ActiveBird({ position, onDie }) {
    */
   const birdCollision = () => {
     const position = birdRef.current.translation();
+
+    birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    birdRef.current.setTranslation(
+      {
+        x: Math.round(position.x * 10) / 10,
+        y: position.y,
+        z: Math.round(position.z * 10) / 10,
+      },
+      true,
+    );
 
     switch (cameraPosition) {
       case 0:
@@ -292,7 +309,7 @@ export default function ActiveBird({ position, onDie }) {
       ref={birdRef}
       colliders={false}
       canSleep={false}
-      angularDamping={1}
+      angularDamping={4}
       enabledRotations={[false, true, false]}
       friction={2}
       restitution={0}
@@ -300,7 +317,7 @@ export default function ActiveBird({ position, onDie }) {
     >
       {/* Bird collider */}
       <CapsuleCollider
-        args={[0.18, 0.16]}
+        args={[0.19, 0.16]}
         mass={0.5}
         onCollisionEnter={birdCollision}
       />

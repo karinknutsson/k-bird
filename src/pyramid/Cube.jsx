@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import useGame from "../stores/useGame";
@@ -19,8 +19,8 @@ export default function Cube({ size, position }) {
    */
   const handleHitCube = () => {
     if (phase === "playing") {
-      if (!isTouched) incrementCubeHits();
       setIsTouched(true);
+      if (!isTouched) incrementCubeHits();
     }
   };
 
@@ -31,7 +31,7 @@ export default function Cube({ size, position }) {
         onCollisionEnter={handleHitCube}
         args={[0.25, 0.25, 0.25]}
         position={position}
-        friction={1.5}
+        friction={2}
       />
 
       {/* Cube mesh */}
