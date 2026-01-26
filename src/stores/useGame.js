@@ -48,8 +48,8 @@ export default create(
                 ? 0
                 : state.cameraPosition + 1
               : state.cameraPosition === 0
-              ? 3
-              : state.cameraPosition - 1;
+                ? 3
+                : state.cameraPosition - 1;
 
           return {
             isCameraMoving: true,
@@ -86,6 +86,17 @@ export default create(
           if (state.phase === "ready")
             return {
               phase: "playing",
+            };
+
+          return {};
+        });
+      },
+
+      ready: () => {
+        set((state) => {
+          if (state.phase === "playing")
+            return {
+              phase: "ready",
             };
 
           return {};
@@ -134,5 +145,5 @@ export default create(
         });
       },
     };
-  })
+  }),
 );

@@ -48,7 +48,7 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
-  const { setCubeCount, cameraPosition, livesPositions, phase, end } =
+  const { setCubeCount, cameraPosition, livesPositions, phase, ready, end } =
     useGame();
 
   const birdGroup = useRef();
@@ -73,6 +73,7 @@ export default function Pyramid({ levelCount = 4 }) {
 
       gsap.to(".game-over-container", { opacity: 1, duration: 0.5 });
     } else {
+      ready();
       setActiveIndex((prev) => prev - 1);
       setActivePosition(null);
     }
