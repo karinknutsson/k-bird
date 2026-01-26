@@ -19,36 +19,39 @@ export default function ActiveBird({ position, onDie }) {
   /**
    * Jump functionality
    */
+  const downwardMovement = 0.38466;
+  const upwardMovement = 0.28795;
+
   // Movement directions
   const movement = useMemo(() => {
     switch (cameraPosition) {
       case 0:
         return {
-          upLeft: { x: -0.29, z: 0 },
-          upRight: { x: 0, z: -0.29 },
-          downLeft: { x: 0, z: 0.39 },
-          downRight: { x: 0.39, z: 0 },
+          upLeft: { x: -upwardMovement, z: 0 },
+          upRight: { x: 0, z: -upwardMovement },
+          downLeft: { x: 0, z: downwardMovement },
+          downRight: { x: downwardMovement, z: 0 },
         };
       case 1:
         return {
-          upLeft: { x: 0, z: -0.29 },
-          upRight: { x: 0.29, z: 0 },
-          downLeft: { x: -0.39, z: 0 },
-          downRight: { x: 0, z: 0.39 },
+          upLeft: { x: 0, z: -upwardMovement },
+          upRight: { x: upwardMovement, z: 0 },
+          downLeft: { x: -downwardMovement, z: 0 },
+          downRight: { x: 0, z: downwardMovement },
         };
       case 2:
         return {
-          upLeft: { x: 0.29, z: 0 },
-          upRight: { x: 0, z: 0.29 },
-          downLeft: { x: 0, z: -0.39 },
-          downRight: { x: -0.39, z: 0 },
+          upLeft: { x: upwardMovement, z: 0 },
+          upRight: { x: 0, z: upwardMovement },
+          downLeft: { x: 0, z: -downwardMovement },
+          downRight: { x: -downwardMovement, z: 0 },
         };
       case 3:
         return {
-          upLeft: { x: 0, z: 0.29 },
-          upRight: { x: -0.29, z: 0 },
-          downLeft: { x: 0.39, z: 0 },
-          downRight: { x: 0, z: -0.39 },
+          upLeft: { x: 0, z: upwardMovement },
+          upRight: { x: -upwardMovement, z: 0 },
+          downLeft: { x: downwardMovement, z: 0 },
+          downRight: { x: 0, z: -downwardMovement },
         };
     }
   }, [cameraPosition]);
