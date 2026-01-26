@@ -12,7 +12,6 @@ export default function InactiveBird({ position, scale, onAwake, bodyType }) {
     const position = birdRef.current.translation();
 
     if (position.y < 3) onAwake(position);
-    if (position.y < 3) console.log("bird collides with pyramid");
   };
 
   return (

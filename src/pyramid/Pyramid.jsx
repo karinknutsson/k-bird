@@ -4,6 +4,7 @@ import useGame from "../stores/useGame";
 import { RigidBody } from "@react-three/rapier";
 import InactiveBird from "../bird/InactiveBird";
 import ActiveBird from "../bird/ActiveBird";
+import { Text } from "@react-three/drei";
 
 const cubeSize = 0.5;
 
@@ -47,10 +48,11 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
-  const { setCubeCount, cameraPosition, livesPositions } = useGame();
+  const { setCubeCount, cameraPosition, livesPositions, phase, end } =
+    useGame();
 
   const birdGroup = useRef();
-  const [lives, setLives] = useState(6);
+  const [lives, setLives] = useState(1);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [activePosition, setActivePosition] = useState();
   const [livesUsed, setLivesUsed] = useState(0);
@@ -70,8 +72,12 @@ export default function Pyramid({ levelCount = 4 }) {
   }
 
   function handleDeath() {
-    setActiveIndex((prev) => prev - 1);
-    setActivePosition(null);
+    if (activeIndex === 0) {
+      end();
+    } else {
+      setActiveIndex((prev) => prev - 1);
+      setActivePosition(null);
+    }
   }
 
   function calculateBirdPositions() {
@@ -120,9 +126,11 @@ export default function Pyramid({ levelCount = 4 }) {
         })}
       </group>
 
-      {activePosition && (
+      {phase !== "ended" && activePosition && (
         <ActiveBird position={activePosition} onDie={handleDeath} />
       )}
+
+      {phase === "ended" && <Text>GAME OVER</Text>}
     </>
   );
 }
