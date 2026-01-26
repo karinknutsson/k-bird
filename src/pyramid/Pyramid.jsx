@@ -59,7 +59,7 @@ export default function Pyramid({ levelCount = 4 }) {
   } = useGame();
 
   const birdGroup = useRef();
-  const [lives, setLives] = useState(3);
+  const [lives, setLives] = useState(1);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [activePosition, setActivePosition] = useState();
   const livesPositionY = 3;
