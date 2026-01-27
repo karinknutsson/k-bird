@@ -49,10 +49,14 @@ export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
   const { setCubeCount, cameraPosition, phase, ready, end } = useGame();
 
-  const [lives, setLives] = useState(6);
+  const [lives, setLives] = useState(3);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
+  const [showBird, setShowBird] = useState(true);
 
   function handleDeath() {
+    setLives((prev) => prev - 1);
+    setShowBird(false);
+
     if (activeIndex === 0) {
       end();
 
@@ -60,13 +64,11 @@ export default function Pyramid({ levelCount = 4 }) {
     } else {
       ready();
       setActiveIndex((prev) => prev - 1);
+      setShowBird(true);
     }
   }
 
   useEffect(() => {
-    const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
-    setCubeCount(totalCubes);
-
     const extralivesContainer = document.querySelector(".extralives-container");
     extralivesContainer.innerHTML = "";
 
@@ -76,6 +78,11 @@ export default function Pyramid({ levelCount = 4 }) {
       lifeDiv.innerHTML = `<img src="./jbirdicon.png" class="extralife-image" />`;
       extralivesContainer.appendChild(lifeDiv);
     }
+  }, [lives]);
+
+  useEffect(() => {
+    const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
+    setCubeCount(totalCubes);
   }, []);
 
   return (
@@ -88,7 +95,7 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      {phase !== "ended" && <ActiveBird onDie={handleDeath} />}
+      {showBird && <ActiveBird onDie={handleDeath} />}
     </>
   );
 }

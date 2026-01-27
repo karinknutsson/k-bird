@@ -256,7 +256,7 @@ export default function ActiveBird({ onDie }) {
       pause();
 
       setTimeout(() => {
-        onDie();
+        resetAndDie();
         unpause();
       }, 2000);
       return;
@@ -306,15 +306,16 @@ export default function ActiveBird({ onDie }) {
     }
   };
 
-  useFrame(() => {
-    if (birdRef.current && birdRef.current.translation().y < -6) onDie();
-  });
+  function resetAndDie() {
+    birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    birdRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+    birdRef.current.setTranslation({ x: 0, y: 3, z: 0 }, true);
+    onDie();
+  }
 
-  // useEffect(() => {
-  //   if (birdRef.current) {
-  //     birdRef.current.setTranslation(position, true);
-  //   }
-  // }, [position]);
+  useFrame(() => {
+    if (birdRef.current && birdRef.current.translation().y < -6) resetAndDie();
+  });
 
   return (
     <RigidBody
