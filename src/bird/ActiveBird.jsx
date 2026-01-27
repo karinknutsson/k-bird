@@ -249,7 +249,11 @@ export default function ActiveBird({ position, onDie }) {
   /**
    * Bird collision
    */
-  const birdCollision = () => {
+  const birdCollision = (e) => {
+    if (e.rigidBody.userData.type === "enemyEgg") {
+      onDie();
+      return;
+    }
     const position = birdRef.current.translation();
 
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
