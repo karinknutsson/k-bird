@@ -327,9 +327,10 @@ export default function ActiveBird({ position, onDie }) {
     >
       {/* Bird collider */}
       <CapsuleCollider
-        args={[0.19, 0.16]}
+        args={[0.1, 0.16]}
         mass={0.5}
         onCollisionEnter={birdCollision}
+        position={[0, -0.09, 0]}
       />
 
       {/* Bird mesh */}
