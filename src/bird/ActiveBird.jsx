@@ -5,7 +5,7 @@ import { useEffect, useRef, useMemo } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
 
-export default function ActiveBird({ position, onDie }) {
+export default function ActiveBird({ onDie }) {
   const birdRef = useRef();
 
   const birdDirection = useRef("downLeft");
@@ -14,6 +14,7 @@ export default function ActiveBird({ position, onDie }) {
 
   const start = useGame((state) => state.start);
   const pause = useGame((state) => state.pause);
+  const unpause = useGame((state) => state.unpause);
   const cameraPosition = useGame((state) => state.cameraPosition);
   const moveCamera = useGame((state) => state.moveCamera);
 
@@ -256,6 +257,7 @@ export default function ActiveBird({ position, onDie }) {
 
       setTimeout(() => {
         onDie();
+        unpause();
       }, 2000);
       return;
     }
@@ -308,17 +310,18 @@ export default function ActiveBird({ position, onDie }) {
     if (birdRef.current && birdRef.current.translation().y < -6) onDie();
   });
 
-  useEffect(() => {
-    if (birdRef.current) {
-      birdRef.current.setTranslation(position, true);
-    }
-  }, [position]);
+  // useEffect(() => {
+  //   if (birdRef.current) {
+  //     birdRef.current.setTranslation(position, true);
+  //   }
+  // }, [position]);
 
   return (
     <RigidBody
       ref={birdRef}
       colliders={false}
       canSleep={false}
+      position={[0, 3, 0]}
       angularDamping={4}
       enabledRotations={[false, true, false]}
       friction={2}

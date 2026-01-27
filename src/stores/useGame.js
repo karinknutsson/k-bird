@@ -111,6 +111,14 @@ export default create(
         });
       },
 
+      unpause: () => {
+        set(() => {
+          return {
+            phase: "playing",
+          };
+        });
+      },
+
       restart: () => {
         set((state) => {
           if (state.phase === "playing" || state.phase === "ended")
@@ -130,19 +138,6 @@ export default create(
             };
 
           return {};
-        });
-      },
-
-      /**
-       * Lives
-       */
-      lives: 3,
-
-      decrementLives: () => {
-        set((state) => {
-          return {
-            extraLives: state.lives - 1,
-          };
         });
       },
     };

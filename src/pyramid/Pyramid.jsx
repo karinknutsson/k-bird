@@ -76,8 +76,6 @@ export default function Pyramid({ levelCount = 4 }) {
       lifeDiv.innerHTML = `<img src="./jbirdicon.png" class="extralife-image" />`;
       extralivesContainer.appendChild(lifeDiv);
     }
-
-    console.log(extralivesContainer);
   }, []);
 
   return (
@@ -90,9 +88,7 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      {phase !== "ended" && (
-        <ActiveBird position={{ x: 0, y: 3, z: 0 }} onDie={handleDeath} />
-      )}
+      {phase !== "ended" && <ActiveBird onDie={handleDeath} />}
     </>
   );
 }
