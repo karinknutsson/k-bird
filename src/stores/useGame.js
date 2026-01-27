@@ -103,6 +103,14 @@ export default create(
         });
       },
 
+      pause: () => {
+        set(() => {
+          return {
+            phase: "pause",
+          };
+        });
+      },
+
       restart: () => {
         set((state) => {
           if (state.phase === "playing" || state.phase === "ended")

@@ -13,6 +13,7 @@ export default function ActiveBird({ position, onDie }) {
   let isJumping = true;
 
   const start = useGame((state) => state.start);
+  const pause = useGame((state) => state.pause);
   const cameraPosition = useGame((state) => state.cameraPosition);
   const moveCamera = useGame((state) => state.moveCamera);
 
@@ -251,9 +252,14 @@ export default function ActiveBird({ position, onDie }) {
    */
   const birdCollision = (e) => {
     if (e.rigidBody.userData.type === "enemyEgg") {
-      onDie();
+      pause();
+
+      setTimeout(() => {
+        onDie();
+      }, 2000);
       return;
     }
+
     const position = birdRef.current.translation();
 
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
