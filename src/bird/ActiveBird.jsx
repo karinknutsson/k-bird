@@ -252,7 +252,7 @@ export default function ActiveBird({ onDie }) {
    * Bird collision
    */
   const birdCollision = (e) => {
-    if (e.rigidBody.userData.type === "enemyEgg") {
+    if (e.rigidBody.userData && e.rigidBody.userData.type === "enemyEgg") {
       pause();
 
       setTimeout(() => {
