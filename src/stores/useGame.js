@@ -138,15 +138,6 @@ export default create(
        */
       lives: 3,
 
-      livesPositions: [
-        new THREE.Vector3(-1, 0, 1),
-        new THREE.Vector3(-1, 0, -1),
-        new THREE.Vector3(1, 0, -1),
-        new THREE.Vector3(1, 0, 1),
-      ],
-
-      livesRotationY: [0, -Math.PI * 0.5, Math.PI, Math.PI * 0.5],
-
       decrementLives: () => {
         set((state) => {
           return {

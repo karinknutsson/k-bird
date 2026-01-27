@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
 import { RigidBody } from "@react-three/rapier";
-import InactiveBird from "../bird/InactiveBird";
 import ActiveBird from "../bird/ActiveBird";
 import gsap from "gsap";
 
@@ -67,6 +66,18 @@ export default function Pyramid({ levelCount = 4 }) {
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
     setCubeCount(totalCubes);
+
+    const extralivesContainer = document.querySelector(".extralives-container");
+    extralivesContainer.innerHTML = "";
+
+    for (let i = 0; i < lives - 1; i++) {
+      const lifeDiv = document.createElement("div");
+      lifeDiv.className = "extralife-wrapper";
+      lifeDiv.innerHTML = `<img src="./jbirdicon.png" class="extralife-image" />`;
+      extralivesContainer.appendChild(lifeDiv);
+    }
+
+    console.log(extralivesContainer);
   }, []);
 
   return (
