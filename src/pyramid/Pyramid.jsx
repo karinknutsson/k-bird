@@ -48,31 +48,10 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
-  const {
-    setCubeCount,
-    cameraPosition,
-    livesPositions,
-    livesRotationY,
-    phase,
-    ready,
-    end,
-  } = useGame();
+  const { setCubeCount, cameraPosition, phase, ready, end } = useGame();
 
-  const birdGroup = useRef();
-  const [lives, setLives] = useState(1);
+  const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
-  const [activePosition, setActivePosition] = useState();
-  const livesPositionY = 3;
-
-  const birdPositions = useMemo(
-    () => calculateBirdPositions(),
-    [lives, cameraPosition, livesPositions],
-  );
-
-  function handleAwake(_, position) {
-    setLives((prev) => prev - 1);
-    setActivePosition(position);
-  }
 
   function handleDeath() {
     if (activeIndex === 0) {
@@ -82,23 +61,7 @@ export default function Pyramid({ levelCount = 4 }) {
     } else {
       ready();
       setActiveIndex((prev) => prev - 1);
-      setActivePosition(null);
     }
-  }
-
-  function calculateBirdPositions() {
-    const positions = [];
-
-    for (let i = 0; i < lives; i++) {
-      const x =
-        livesPositions[cameraPosition].x * cubeSize * (lives - i - 1.00001);
-      const z =
-        livesPositions[cameraPosition].z * cubeSize * (lives - i - 1.00001);
-
-      positions.push({ x, y: 0, z });
-    }
-
-    return positions;
   }
 
   useEffect(() => {
@@ -116,25 +79,8 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      <group ref={birdGroup} position={[0, livesPositionY, 0]}>
-        {[...Array(lives)].map((_, index) => {
-          const inactive = activeIndex !== index;
-
-          return (
-            <InactiveBird
-              key={`${index}-${lives}`}
-              position={[birdPositions[index].x, 0, birdPositions[index].z]}
-              rotationY={livesRotationY[cameraPosition]}
-              scale={0.14}
-              onAwake={(position) => handleAwake(index, position)}
-              bodyType={inactive ? "kinematicPosition" : "dynamic"}
-            />
-          );
-        })}
-      </group>
-
-      {phase !== "ended" && activePosition && (
-        <ActiveBird position={activePosition} onDie={handleDeath} />
+      {phase !== "ended" && (
+        <ActiveBird position={{ x: 0, y: 3, z: 0 }} onDie={handleDeath} />
       )}
     </>
   );

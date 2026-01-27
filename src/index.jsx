@@ -24,12 +24,12 @@ root.render(
           far: 200,
 
           // Game view
-          // position: [5, 6, 5],
+          position: [5, 6, 5],
 
           // Top view
           // position: [0, 8, 0],
           // Front view
-          position: [0, 1.5, 5],
+          // position: [0, 1.5, 5],
         }}
       >
         {/* <Canvas> */}
