@@ -6,6 +6,21 @@ export default create(
   subscribeWithSelector((set) => {
     return {
       /**
+       * Levels
+       */
+      levelCount: 3,
+      enemyInterval: 4000,
+
+      incrementLevelCount: () => {
+        set((state) => {
+          return {
+            levelCount: state.levelCount + 1,
+            enemyInterval: state.enemyInterval - 1000,
+          };
+        });
+      },
+
+      /**
        * Cubes
        */
       cubeCount: 0,

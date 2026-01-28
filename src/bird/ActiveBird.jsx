@@ -62,7 +62,7 @@ export default function ActiveBird({ onDie }) {
   cameraPositionRef.current = cameraPosition;
 
   // Lock / unlock jump
-  const setIsJumping = (value, ms = 900) => {
+  const setIsJumping = (value, ms = 800) => {
     if (value) {
       isJumping = true;
     } else {
@@ -113,7 +113,7 @@ export default function ActiveBird({ onDie }) {
     }
 
     birdDirection.current = birdOnEdge ? "downLeft" : "upLeft";
-    setIsJumping(false, 900);
+    setIsJumping(false, 950);
   };
 
   // Jump up right
@@ -155,7 +155,7 @@ export default function ActiveBird({ onDie }) {
     }
 
     birdDirection.current = birdOnEdge ? "downRight" : "upRight";
-    setIsJumping(false, 900);
+    setIsJumping(false, 950);
   };
 
   // Jump down left
