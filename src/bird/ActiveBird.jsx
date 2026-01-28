@@ -62,7 +62,7 @@ export default function ActiveBird({ onDie }) {
   cameraPositionRef.current = cameraPosition;
 
   // Lock / unlock jump
-  const setIsJumping = (value, ms = 800) => {
+  const setIsJumping = (value, ms = 900) => {
     if (value) {
       isJumping = true;
     } else {

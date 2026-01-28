@@ -28,6 +28,20 @@ export default create(
       },
 
       /**
+       * Score
+       */
+
+      score: 0,
+
+      incrementScore: () => {
+        set((state) => {
+          return {
+            score: state.score + 100,
+          };
+        });
+      },
+
+      /**
        * Camera
        */
       isCameraMoving: false,

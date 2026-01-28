@@ -1,5 +1,5 @@
 import { Physics } from "@react-three/rapier";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import Lights from "./Lights.jsx";
 import Pyramid from "./pyramid/Pyramid.jsx";
 import Enemies from "./enemies/Enemies.jsx";
@@ -7,7 +7,12 @@ import useGame from "./stores/useGame.js";
 import gsap from "gsap";
 
 export default function Experience() {
-  const { phase, cubeCount, cubeHits, pause } = useGame();
+  const { phase, cubeCount, cubeHits, pause, score } = useGame();
+
+  useEffect(() => {
+    const scoreValue = document.querySelector(".score-value");
+    if (scoreValue) scoreValue.textContent = score;
+  }, [score]);
 
   useEffect(() => {
     if (phase === "playing" && cubeHits >= cubeCount) {
