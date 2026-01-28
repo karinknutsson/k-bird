@@ -252,7 +252,7 @@ export default function ActiveBird({ onDie }) {
    * Bird collision
    */
   const birdCollision = (e) => {
-    if (e.rigidBody.userData && e.rigidBody.userData.type === "enemyEgg") {
+    if (e.rigidBodyObject.name === "enemyEgg") {
       pause();
 
       setTimeout(() => {
@@ -328,7 +328,7 @@ export default function ActiveBird({ onDie }) {
       friction={2}
       restitution={0}
       type="dynamic"
-      userData={{ type: "bird" }}
+      name="bird"
     >
       {/* Bird collider */}
       <CapsuleCollider
