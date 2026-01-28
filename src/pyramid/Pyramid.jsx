@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
 import { RigidBody } from "@react-three/rapier";
-import InactiveBird from "../bird/InactiveBird";
 import ActiveBird from "../bird/ActiveBird";
 import gsap from "gsap";
 
@@ -48,33 +47,16 @@ export function CubeLevel({ level }) {
 
 export default function Pyramid({ levelCount = 4 }) {
   const pyramidRef = useRef();
-  const {
-    setCubeCount,
-    cameraPosition,
-    livesPositions,
-    livesRotationY,
-    phase,
-    ready,
-    end,
-  } = useGame();
+  const { setCubeCount, cameraPosition, phase, ready, end } = useGame();
 
-  const birdGroup = useRef();
   const [lives, setLives] = useState(3);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
-  const [activePosition, setActivePosition] = useState();
-  const livesPositionY = 3;
-
-  const birdPositions = useMemo(
-    () => calculateBirdPositions(),
-    [lives, cameraPosition, livesPositions],
-  );
-
-  function handleAwake(_, position) {
-    setLives((prev) => prev - 1);
-    setActivePosition(position);
-  }
+  const [showBird, setShowBird] = useState(true);
 
   function handleDeath() {
+    setLives((prev) => prev - 1);
+    setShowBird(false);
+
     if (activeIndex === 0) {
       end();
 
@@ -82,24 +64,21 @@ export default function Pyramid({ levelCount = 4 }) {
     } else {
       ready();
       setActiveIndex((prev) => prev - 1);
-      setActivePosition(null);
+      setShowBird(true);
     }
   }
 
-  function calculateBirdPositions() {
-    const positions = [];
+  useEffect(() => {
+    const extralivesContainer = document.querySelector(".extralives-container");
+    extralivesContainer.innerHTML = "";
 
-    for (let i = 0; i < lives; i++) {
-      const x =
-        livesPositions[cameraPosition].x * cubeSize * (lives - i - 1.00001);
-      const z =
-        livesPositions[cameraPosition].z * cubeSize * (lives - i - 1.00001);
-
-      positions.push({ x, y: 0, z });
+    for (let i = 0; i < lives - 1; i++) {
+      const lifeDiv = document.createElement("div");
+      lifeDiv.className = "extralife-wrapper";
+      lifeDiv.innerHTML = `<img src="./jbirdicon.png" class="extralife-image" />`;
+      extralivesContainer.appendChild(lifeDiv);
     }
-
-    return positions;
-  }
+  }, [lives]);
 
   useEffect(() => {
     const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
@@ -116,26 +95,7 @@ export default function Pyramid({ levelCount = 4 }) {
         </group>
       </RigidBody>
 
-      <group ref={birdGroup} position={[0, livesPositionY, 0]}>
-        {[...Array(lives)].map((_, index) => {
-          const inactive = activeIndex !== index;
-
-          return (
-            <InactiveBird
-              key={`${index}-${lives}`}
-              position={[birdPositions[index].x, 0, birdPositions[index].z]}
-              rotationY={livesRotationY[cameraPosition]}
-              scale={0.14}
-              onAwake={(position) => handleAwake(index, position)}
-              bodyType={inactive ? "kinematicPosition" : "dynamic"}
-            />
-          );
-        })}
-      </group>
-
-      {phase !== "ended" && activePosition && (
-        <ActiveBird position={activePosition} onDie={handleDeath} />
-      )}
+      {showBird && <ActiveBird onDie={handleDeath} />}
     </>
   );
 }

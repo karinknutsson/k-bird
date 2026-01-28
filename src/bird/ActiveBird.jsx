@@ -5,7 +5,7 @@ import { useEffect, useRef, useMemo } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
 
-export default function ActiveBird({ position, onDie }) {
+export default function ActiveBird({ onDie }) {
   const birdRef = useRef();
 
   const birdDirection = useRef("downLeft");
@@ -13,6 +13,8 @@ export default function ActiveBird({ position, onDie }) {
   let isJumping = true;
 
   const start = useGame((state) => state.start);
+  const pause = useGame((state) => state.pause);
+  const unpause = useGame((state) => state.unpause);
   const cameraPosition = useGame((state) => state.cameraPosition);
   const moveCamera = useGame((state) => state.moveCamera);
 
@@ -249,7 +251,17 @@ export default function ActiveBird({ position, onDie }) {
   /**
    * Bird collision
    */
-  const birdCollision = () => {
+  const birdCollision = (e) => {
+    if (e.rigidBodyObject.name === "enemyEgg") {
+      pause();
+
+      setTimeout(() => {
+        resetAndDie();
+        unpause();
+      }, 2000);
+      return;
+    }
+
     const position = birdRef.current.translation();
 
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -294,32 +306,36 @@ export default function ActiveBird({ position, onDie }) {
     }
   };
 
-  useFrame(() => {
-    if (birdRef.current && birdRef.current.translation().y < -6) onDie();
-  });
+  function resetAndDie() {
+    birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    birdRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+    birdRef.current.setTranslation({ x: 0, y: 3, z: 0 }, true);
+    onDie();
+  }
 
-  useEffect(() => {
-    if (birdRef.current) {
-      birdRef.current.setTranslation(position, true);
-    }
-  }, [position]);
+  useFrame(() => {
+    if (birdRef.current && birdRef.current.translation().y < -6) resetAndDie();
+  });
 
   return (
     <RigidBody
       ref={birdRef}
       colliders={false}
       canSleep={false}
+      position={[0, 3, 0]}
       angularDamping={4}
       enabledRotations={[false, true, false]}
       friction={2}
       restitution={0}
       type="dynamic"
+      name="bird"
     >
       {/* Bird collider */}
       <CapsuleCollider
-        args={[0.19, 0.16]}
+        args={[0.1, 0.16]}
         mass={0.5}
         onCollisionEnter={birdCollision}
+        position={[0, -0.09, 0]}
       />
 
       {/* Bird mesh */}

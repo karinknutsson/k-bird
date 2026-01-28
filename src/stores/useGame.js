@@ -103,6 +103,22 @@ export default create(
         });
       },
 
+      pause: () => {
+        set(() => {
+          return {
+            phase: "pause",
+          };
+        });
+      },
+
+      unpause: () => {
+        set(() => {
+          return {
+            phase: "ready",
+          };
+        });
+      },
+
       restart: () => {
         set((state) => {
           if (state.phase === "playing" || state.phase === "ended")
@@ -122,28 +138,6 @@ export default create(
             };
 
           return {};
-        });
-      },
-
-      /**
-       * Lives
-       */
-      lives: 3,
-
-      livesPositions: [
-        new THREE.Vector3(-1, 0, 1),
-        new THREE.Vector3(-1, 0, -1),
-        new THREE.Vector3(1, 0, -1),
-        new THREE.Vector3(1, 0, 1),
-      ],
-
-      livesRotationY: [0, -Math.PI * 0.5, Math.PI, Math.PI * 0.5],
-
-      decrementLives: () => {
-        set((state) => {
-          return {
-            extraLives: state.lives - 1,
-          };
         });
       },
     };

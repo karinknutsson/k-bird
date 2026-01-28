@@ -20,20 +20,31 @@ body,
   padding: 0;
 }
 
-.interface-container {
+.interface-container,
+.game-over-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
+  z-index: 1000;
+}
+
+.interface-container {
+  padding: 64px;
+}
+
+.extralives-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+}
+
+.extralife-image {
+  width: 64px;
+  height: 64px;
 }
 
 .game-over-container {
-  width: 100%;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
