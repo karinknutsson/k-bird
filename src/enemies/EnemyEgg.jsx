@@ -1,11 +1,6 @@
-import {
-  RigidBody,
-  CuboidCollider,
-  CapsuleCollider,
-} from "@react-three/rapier";
+import { RigidBody, CapsuleCollider } from "@react-three/rapier";
 import * as THREE from "three";
 import { useRef, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
 import { useMemo } from "react";
 import useGame from "../stores/useGame";
 
@@ -18,8 +13,7 @@ export default function EnemyEgg({ active, scale = 1 }) {
   const enemyEggRef = useRef();
   const intervalRef = useRef();
 
-  // const cameraPosition = useGame((state) => state.cameraPosition);
-  const { cameraPosition, ready } = useGame();
+  const { cameraPosition } = useGame();
 
   /**
    * Jump functionality
@@ -113,9 +107,6 @@ export default function EnemyEgg({ active, scale = 1 }) {
           >
             <torusGeometry args={[0.05, 0.2, 32, 100]} />
           </mesh>
-          {/* <mesh position={[0, 0, 0]} material={eggMaterial}>
-            <octahedronGeometry args={[0.2, 60]} />
-          </mesh> */}
         </RigidBody>
       )}
     </>
