@@ -29,7 +29,7 @@ export default function Experience() {
       setTimeout(() => {
         pause();
 
-        gsap.to(".game-won-container", {
+        gsap.to(".level-won-container", {
           opacity: 1,
           duration: 0.5,
         });
@@ -39,7 +39,7 @@ export default function Experience() {
         unpause();
         ready();
 
-        gsap.to(".game-won-container", {
+        gsap.to(".level-won-container", {
           opacity: 0,
           duration: 0.5,
         });

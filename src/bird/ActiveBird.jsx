@@ -13,7 +13,8 @@ export default function ActiveBird({ onDie }) {
   const [subscribeKeys] = useKeyboardControls();
   let isJumping = true;
 
-  const { start, pause, unpause, cameraPosition, moveCamera } = useGame();
+  const { start, pause, unpause, cameraPosition, moveCamera, phase } =
+    useGame();
 
   /**
    * Jump functionality
@@ -253,7 +254,7 @@ export default function ActiveBird({ onDie }) {
       pause();
 
       setTimeout(() => {
-        resetAndDie();
+        onDie();
         unpause();
       }, 2000);
       return;
@@ -331,13 +332,14 @@ export default function ActiveBird({ onDie }) {
     birdDirection.current = "downLeft";
   }
 
-  function resetAndDie() {
-    resetBird();
-    onDie();
-  }
+  useEffect(() => {
+    if (phase === "ready") {
+      resetBird();
+    }
+  }, [phase]);
 
   useFrame(() => {
-    if (birdRef.current && birdRef.current.translation().y < -6) resetAndDie();
+    if (birdRef.current && birdRef.current.translation().y < -6) onDie();
   });
 
   return (
