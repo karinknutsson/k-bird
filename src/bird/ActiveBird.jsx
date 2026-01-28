@@ -303,7 +303,7 @@ export default function ActiveBird({ onDie }) {
     }
   };
 
-  function resetAndDie() {
+  function resetBird() {
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
     birdRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
     birdRef.current.setTranslation({ x: 0, y: 3, z: 0 }, true);
@@ -329,7 +329,10 @@ export default function ActiveBird({ onDie }) {
     quaternion.setFromEuler(new THREE.Euler(0, rotationY, 0));
     birdRef.current.setRotation(quaternion, true);
     birdDirection.current = "downLeft";
+  }
 
+  function resetAndDie() {
+    resetBird();
     onDie();
   }
 
