@@ -140,6 +140,17 @@ export default create(
           return {};
         });
       },
+
+      won: () => {
+        set((state) => {
+          if (state.phase === "playing")
+            return {
+              phase: "won",
+            };
+
+          return {};
+        });
+      },
     };
   }),
 );

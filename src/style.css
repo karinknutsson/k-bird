@@ -21,7 +21,8 @@ body,
 }
 
 .interface-container,
-.game-over-container {
+.game-over-container,
+.game-won-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -44,7 +45,8 @@ body,
   height: 64px;
 }
 
-.game-over-container {
+.game-over-container,
+.game-won-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,7 +54,8 @@ body,
   opacity: 0;
 }
 
-.game-over-text-wrapper {
+.game-over-text-wrapper,
+.game-won-text-wrapper {
   color: white;
   font-family: "Sixtyfour", monospace;
   font-size: 5rem;
