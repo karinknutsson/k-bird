@@ -4,7 +4,7 @@ import useGame from "../stores/useGame";
 
 export default function Enemies() {
   const [enemyEggs, setEnemyEggs] = useState([]);
-  const { phase, cameraPosition } = useGame();
+  const { phase, cameraPosition, enemyInterval } = useGame();
   const intervalRef = useRef();
   const cameraPositionRef = useRef(cameraPosition);
 
@@ -19,7 +19,7 @@ export default function Enemies() {
           ...prev,
           { active: true, cameraPosition: cameraPositionRef.current },
         ]);
-      }, 3000);
+      }, enemyInterval);
     } else if (phase === "ready" || phase === "end") {
       setEnemyEggs((prev) => prev.map((egg) => ({ ...egg, active: false })));
       clearInterval(intervalRef.current);
