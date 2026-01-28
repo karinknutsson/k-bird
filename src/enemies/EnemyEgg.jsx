@@ -2,12 +2,11 @@ import { RigidBody, CapsuleCollider } from "@react-three/rapier";
 import * as THREE from "three";
 import { useRef, useEffect } from "react";
 import { useMemo } from "react";
-import useGame from "../stores/useGame";
 
 /**
  * Material
  */
-const eggMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
+const eggMaterial = new THREE.MeshStandardMaterial({ color: "#ff6600" });
 
 export default function EnemyEgg({ active, cameraPosition, scale = 1 }) {
   const enemyEggRef = useRef();
