@@ -7,17 +7,18 @@ import useGame from "./stores/useGame.js";
 import gsap from "gsap";
 
 export default function Experience() {
-  const { phase, cubeCount, cubeHits, won, pause } = useGame();
+  const { phase, cubeCount, cubeHits, pause } = useGame();
 
   useEffect(() => {
     if (phase === "playing" && cubeHits >= cubeCount) {
-      pause();
-      won();
+      setTimeout(() => {
+        pause();
 
-      gsap.to(".game-won-container", {
-        opacity: 1,
-        duration: 0.5,
-      });
+        gsap.to(".game-won-container", {
+          opacity: 1,
+          duration: 0.5,
+        });
+      }, 300);
     }
   }, [cubeHits]);
 
