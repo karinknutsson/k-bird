@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useMemo } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
+import * as THREE from "three";
 
 export default function ActiveBird({ onDie }) {
   const birdRef = useRef();
@@ -12,11 +13,7 @@ export default function ActiveBird({ onDie }) {
   const [subscribeKeys] = useKeyboardControls();
   let isJumping = true;
 
-  const start = useGame((state) => state.start);
-  const pause = useGame((state) => state.pause);
-  const unpause = useGame((state) => state.unpause);
-  const cameraPosition = useGame((state) => state.cameraPosition);
-  const moveCamera = useGame((state) => state.moveCamera);
+  const { start, pause, unpause, cameraPosition, moveCamera } = useGame();
 
   /**
    * Jump functionality
@@ -310,6 +307,27 @@ export default function ActiveBird({ onDie }) {
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
     birdRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
     birdRef.current.setTranslation({ x: 0, y: 3, z: 0 }, true);
+
+    let rotationY = 0;
+    switch (cameraPosition) {
+      case 0:
+        rotationY = 0;
+        break;
+      case 1:
+        rotationY = -Math.PI * 0.5;
+        break;
+      case 2:
+        rotationY = Math.PI;
+        break;
+      case 3:
+        rotationY = Math.PI * 0.5;
+        break;
+    }
+
+    const quaternion = new THREE.Quaternion();
+    quaternion.setFromEuler(new THREE.Euler(0, rotationY, 0));
+    birdRef.current.setRotation(quaternion, true);
+
     onDie();
   }
 
