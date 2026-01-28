@@ -11,8 +11,7 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 export default function Cube({ size, position }) {
   const [isTouched, setIsTouched] = useState(false);
 
-  const phase = useGame((state) => state.phase);
-  const incrementCubeHits = useGame((state) => state.incrementCubeHits);
+  const { phase, incrementCubeHits } = useGame();
 
   /**
    * Change color on hit

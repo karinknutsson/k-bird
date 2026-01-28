@@ -45,11 +45,11 @@ export function CubeLevel({ level }) {
   );
 }
 
-export default function Pyramid({ levelCount = 4 }) {
+export default function Pyramid({ levelCount = 3 }) {
   const pyramidRef = useRef();
-  const { setCubeCount, cameraPosition, phase, ready, end } = useGame();
+  const { setCubeCount, ready, end } = useGame();
 
-  const [lives, setLives] = useState(3);
+  const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [showBird, setShowBird] = useState(true);
 
