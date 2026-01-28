@@ -45,6 +45,15 @@ body,
   height: 64px;
 }
 
+.score-container {
+  color: white;
+  font-family: "Sixtyfour", monospace;
+  font-size: 2rem;
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
 .game-over-container,
 .game-won-container {
   display: flex;
