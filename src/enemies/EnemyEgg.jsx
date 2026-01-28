@@ -18,7 +18,8 @@ export default function EnemyEgg({ active, scale = 1 }) {
   const enemyEggRef = useRef();
   const intervalRef = useRef();
 
-  const cameraPosition = useGame((state) => state.cameraPosition);
+  // const cameraPosition = useGame((state) => state.cameraPosition);
+  const { cameraPosition, ready } = useGame();
 
   /**
    * Jump functionality
@@ -82,6 +83,9 @@ export default function EnemyEgg({ active, scale = 1 }) {
           jumpDownRight();
         }
       }, 1000);
+    } else {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
   }, [active]);
 

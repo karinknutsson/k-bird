@@ -12,6 +12,8 @@ export default function Enemies() {
       setTimeout(() => {
         setShowEgg(true);
       }, 3000);
+    } else if (phase === "ready" || phase === "end") {
+      setShowEgg(false);
     }
   }, [phase]);
 

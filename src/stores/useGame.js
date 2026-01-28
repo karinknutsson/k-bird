@@ -114,7 +114,7 @@ export default create(
       unpause: () => {
         set(() => {
           return {
-            phase: "playing",
+            phase: "ready",
           };
         });
       },
