@@ -7,7 +7,17 @@ import useGame from "./stores/useGame.js";
 import gsap from "gsap";
 
 export default function Experience() {
-  const { phase, cubeCount, cubeHits, pause, score } = useGame();
+  const {
+    phase,
+    cubeCount,
+    cubeHits,
+    pause,
+    unpause,
+    ready,
+    score,
+    levelCount,
+    incrementLevelCount,
+  } = useGame();
 
   useEffect(() => {
     const scoreValue = document.querySelector(".score-value");
@@ -24,6 +34,18 @@ export default function Experience() {
           duration: 0.5,
         });
       }, 300);
+
+      setTimeout(() => {
+        unpause();
+        ready();
+
+        gsap.to(".game-won-container", {
+          opacity: 0,
+          duration: 0.5,
+        });
+
+        if (levelCount < 6) incrementLevelCount();
+      }, 3300);
     }
   }, [cubeHits]);
 
