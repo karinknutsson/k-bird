@@ -21,7 +21,7 @@ bottomFeatherGeometry.applyMatrix4(bottomFeatherMatrix);
  * Material
  */
 const birdMaterial = new THREE.MeshStandardMaterial({ color: "#ffffff" });
-const detailMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
+const detailMaterial = new THREE.MeshStandardMaterial({ color: "#ff6600" });
 const eyeMaterial = new THREE.MeshStandardMaterial({ color: "#000000" });
 
 export default function BirdMesh({ scale }) {

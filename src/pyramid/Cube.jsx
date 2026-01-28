@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import useGame from "../stores/useGame";
@@ -44,7 +44,7 @@ export default function Cube({ size, position }) {
         scale={[size, size, size]}
         position={position}
       >
-        <meshStandardMaterial color={isTouched ? "#ffaf40" : "#8080ff"} />
+        <meshStandardMaterial color={isTouched ? "#66ff66" : "#9966ff"} />
       </mesh>
     </RigidBody>
   );
