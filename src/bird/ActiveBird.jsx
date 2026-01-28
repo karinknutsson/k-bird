@@ -309,6 +309,7 @@ export default function ActiveBird({ onDie }) {
     birdRef.current.setTranslation({ x: 0, y: 3, z: 0 }, true);
 
     let rotationY = 0;
+
     switch (cameraPosition) {
       case 0:
         rotationY = 0;
@@ -327,6 +328,7 @@ export default function ActiveBird({ onDie }) {
     const quaternion = new THREE.Quaternion();
     quaternion.setFromEuler(new THREE.Euler(0, rotationY, 0));
     birdRef.current.setRotation(quaternion, true);
+    birdDirection.current = "downLeft";
 
     onDie();
   }
