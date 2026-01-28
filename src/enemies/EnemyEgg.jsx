@@ -9,11 +9,9 @@ import useGame from "../stores/useGame";
  */
 const eggMaterial = new THREE.MeshStandardMaterial({ color: "#fc5454" });
 
-export default function EnemyEgg({ active, scale = 1 }) {
+export default function EnemyEgg({ active, cameraPosition, scale = 1 }) {
   const enemyEggRef = useRef();
   const intervalRef = useRef();
-
-  const { cameraPosition } = useGame();
 
   /**
    * Jump functionality
