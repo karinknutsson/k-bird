@@ -11,15 +11,20 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 export default function Cube({ size, position }) {
   const [isTouched, setIsTouched] = useState(false);
 
-  const { phase, incrementCubeHits } = useGame();
+  const { phase, incrementCubeHits, incrementScore } = useGame();
 
   /**
    * Change color on hit
    */
   const handleHitCube = (e) => {
-    if (phase === "playing" && e.rigidBodyObject.name === "bird") {
+    if (
+      phase === "playing" &&
+      e.rigidBodyObject.name === "bird" &&
+      !isTouched
+    ) {
       setIsTouched(true);
-      if (!isTouched) incrementCubeHits();
+      incrementScore();
+      incrementCubeHits();
     }
   };
 
