@@ -17,8 +17,12 @@ export default function Cube({ size, position }) {
   /**
    * Change color on hit
    */
-  const handleHitCube = () => {
-    if (phase === "playing") {
+  const handleHitCube = (e) => {
+    if (
+      phase === "playing" &&
+      e.rigidBody.userData &&
+      e.rigidBody.userData.type === "bird"
+    ) {
       setIsTouched(true);
       if (!isTouched) incrementCubeHits();
     }

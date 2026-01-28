@@ -328,6 +328,7 @@ export default function ActiveBird({ onDie }) {
       friction={2}
       restitution={0}
       type="dynamic"
+      userData={{ type: "bird" }}
     >
       {/* Bird collider */}
       <CapsuleCollider
