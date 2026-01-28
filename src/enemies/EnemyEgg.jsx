@@ -97,7 +97,7 @@ export default function EnemyEgg({ active, scale = 1 }) {
           friction={2}
           position={[0, 4, 0]}
           scale={scale}
-          name="enemyEgg  "
+          name="enemyEgg"
         >
           <CapsuleCollider args={[0.04, 0.16]} mass={0.5} />
           <mesh
