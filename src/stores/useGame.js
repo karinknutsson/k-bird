@@ -6,6 +6,30 @@ export default create(
   subscribeWithSelector((set) => {
     return {
       /**
+       * Levels and layers
+       */
+      currentLevel: 1,
+      layerCount: 2,
+      enemyInterval: 6000,
+
+      incrementCurrentLevel: () => {
+        set((state) => {
+          return {
+            currentLevel: state.currentLevel + 1,
+          };
+        });
+      },
+
+      incrementLayerCount: () => {
+        set((state) => {
+          return {
+            layerCount: state.layerCount + 1,
+            enemyInterval: state.enemyInterval - 1000,
+          };
+        });
+      },
+
+      /**
        * Cubes
        */
       cubeCount: 0,
@@ -23,6 +47,14 @@ export default create(
         set((state) => {
           return {
             cubeHits: state.cubeHits + 1,
+          };
+        });
+      },
+
+      resetCubeHits: () => {
+        set((_) => {
+          return {
+            cubeHits: 0,
           };
         });
       },

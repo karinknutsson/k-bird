@@ -45,9 +45,8 @@ export function CubeLevel({ level }) {
   );
 }
 
-export default function Pyramid({ levelCount = 3 }) {
-  const pyramidRef = useRef();
-  const { setCubeCount, ready, end } = useGame();
+export default function Pyramid() {
+  const { setCubeCount, ready, end, layerCount, currentLevel } = useGame();
 
   const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
@@ -59,7 +58,6 @@ export default function Pyramid({ levelCount = 3 }) {
 
     if (activeIndex === 0) {
       end();
-
       gsap.to(".game-over-container", { opacity: 1, duration: 0.5 });
     } else {
       ready();
@@ -81,19 +79,22 @@ export default function Pyramid({ levelCount = 3 }) {
   }, [lives]);
 
   useEffect(() => {
-    const totalCubes = 2 * Math.pow(levelCount, 2) - 2 * levelCount + 1;
+    const totalCubes = 2 * Math.pow(layerCount, 2) - 2 * layerCount + 1;
     setCubeCount(totalCubes);
-  }, []);
+  }, [layerCount]);
 
   return (
     <>
-      <RigidBody ref={pyramidRef} colliders={false} mass={0.1}>
-        <group position={[0, levelCount * cubeSize * 0.5, 0]}>
-          {[...Array(levelCount)].map((_, index) => {
-            return <CubeLevel key={index} level={index} />;
-          })}
-        </group>
-      </RigidBody>
+      <group position={[0, layerCount * cubeSize * 0.5, 0]}>
+        {[...Array(layerCount)].map((_, index) => {
+          return (
+            <CubeLevel
+              key={`level-${currentLevel}-index-${index}`}
+              level={index}
+            />
+          );
+        })}
+      </group>
 
       {showBird && <ActiveBird onDie={handleDeath} />}
     </>

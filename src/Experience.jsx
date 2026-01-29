@@ -7,7 +7,20 @@ import useGame from "./stores/useGame.js";
 import gsap from "gsap";
 
 export default function Experience() {
-  const { phase, cubeCount, cubeHits, pause, score } = useGame();
+  const {
+    phase,
+    cubeCount,
+    cubeHits,
+    pause,
+    unpause,
+    ready,
+    score,
+    currentLevel,
+    layerCount,
+    incrementCurrentLevel,
+    incrementLayerCount,
+    resetCubeHits,
+  } = useGame();
 
   useEffect(() => {
     const scoreValue = document.querySelector(".score-value");
@@ -15,15 +28,35 @@ export default function Experience() {
   }, [score]);
 
   useEffect(() => {
+    const levelValue = document.querySelector(".level-value");
+    if (levelValue) levelValue.textContent = currentLevel;
+  }, [currentLevel]);
+
+  useEffect(() => {
     if (phase === "playing" && cubeHits >= cubeCount) {
       setTimeout(() => {
         pause();
 
-        gsap.to(".game-won-container", {
+        gsap.to(".level-won-container", {
           opacity: 1,
           duration: 0.5,
         });
       }, 300);
+
+      setTimeout(() => {
+        resetCubeHits();
+        incrementCurrentLevel();
+
+        if (layerCount < 6) incrementLayerCount();
+
+        ready();
+        unpause();
+
+        gsap.to(".level-won-container", {
+          opacity: 0,
+          duration: 0.5,
+        });
+      }, 3300);
     }
   }, [cubeHits]);
 
@@ -33,7 +66,7 @@ export default function Experience() {
       <Physics paused={phase === "pause"}>
         <Lights />
         <Pyramid />
-        <Enemies />
+        {/* <Enemies /> */}
       </Physics>
     </>
   );
