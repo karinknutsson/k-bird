@@ -1,7 +1,7 @@
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, use } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
 import * as THREE from "three";
@@ -11,7 +11,6 @@ export default function ActiveBird({ onDie }) {
 
   const birdDirection = useRef("downLeft");
   const [subscribeKeys] = useKeyboardControls();
-  // let isJumping = true;
   const isJumpingRef = useRef(true);
 
   const { start, pause, unpause, cameraPosition, moveCamera, phase } =
@@ -64,7 +63,7 @@ export default function ActiveBird({ onDie }) {
   cameraPositionRef.current = cameraPosition;
 
   // Lock / unlock jump
-  function setIsJumping(value) {
+  function setIsJumpingRef(value) {
     isJumpingRef.current = value;
   }
 
@@ -74,7 +73,7 @@ export default function ActiveBird({ onDie }) {
 
   // Jump up left
   const jumpUpLeft = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     const position = birdRef.current.translation();
 
     // Check if bird is on edge in current zone
@@ -115,7 +114,7 @@ export default function ActiveBird({ onDie }) {
 
   // Jump up right
   const jumpUpRight = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     const position = birdRef.current.translation();
 
     // Check if bird is on edge in current zone
@@ -156,7 +155,7 @@ export default function ActiveBird({ onDie }) {
 
   // Jump down left
   const jumpDownLeft = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     birdRef.current.applyImpulse({
       x: movementRef.current.downLeft.x,
       y: smallJump,
@@ -176,7 +175,7 @@ export default function ActiveBird({ onDie }) {
 
   // Jump down right
   const jumpDownRight = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     birdRef.current.applyImpulse({
       x: movementRef.current.downRight.x,
       y: smallJump,
@@ -194,6 +193,34 @@ export default function ActiveBird({ onDie }) {
     birdDirection.current = "downRight";
   };
 
+  const queuedJumpRef = useRef(null);
+
+  // Queue jumps in case key is pressed before landing
+  function queueJump(jump) {
+    queuedJumpRef.current = jump;
+  }
+
+  useEffect(() => {
+    if (!isJumpingRef.current) {
+      switch (queuedJumpRef.current) {
+        case "downLeft":
+          jumpDownLeft();
+          break;
+        case "downRight":
+          jumpDownRight();
+          break;
+        case "upRight":
+          jumpUpRight();
+          break;
+        case "upLeft":
+          jumpUpLeft();
+          break;
+      }
+
+      queuedJumpRef.current = null;
+    }
+  }, [isJumpingRef.current]);
+
   // Subscribe to jump keys
   useEffect(() => {
     const unsubscribeAny = subscribeKeys(() => {
@@ -203,28 +230,52 @@ export default function ActiveBird({ onDie }) {
     const unsubscribeJumpDownLeft = subscribeKeys(
       (state) => state.downLeft,
       (value) => {
-        if (!isJumpingRef.current && value) jumpDownLeft();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("downLeft");
+        } else {
+          jumpDownLeft();
+        }
       },
     );
 
     const unsubscribeJumpDownRight = subscribeKeys(
       (state) => state.downRight,
       (value) => {
-        if (!isJumpingRef.current && value) jumpDownRight();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("downRight");
+        } else {
+          jumpDownRight();
+        }
       },
     );
 
     const unsubscribeJumpUpRight = subscribeKeys(
       (state) => state.upRight,
       (value) => {
-        if (!isJumpingRef.current && value) jumpUpRight();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("upRight");
+        } else {
+          jumpUpRight();
+        }
       },
     );
 
     const unsubscribeJumpUpLeft = subscribeKeys(
       (state) => state.upLeft,
       (value) => {
-        if (!isJumpingRef.current && value) jumpUpLeft();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("upLeft");
+        } else {
+          jumpUpLeft();
+        }
       },
     );
 
@@ -254,7 +305,7 @@ export default function ActiveBird({ onDie }) {
 
     // Landing time
     setTimeout(() => {
-      setIsJumping(false);
+      setIsJumpingRef(false);
     }, 100);
 
     // Adjust position to be centered on cube
