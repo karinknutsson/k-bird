@@ -46,11 +46,13 @@ export function CubeLevel({ level }) {
 }
 
 export default function Pyramid() {
-  const { setCubeCount, ready, end, layerCount } = useGame();
+  const { setCubeCount, ready, end, layerCount, phase, currentLevel } =
+    useGame();
 
   const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [showBird, setShowBird] = useState(true);
+  const [componentKey, setComponentKey] = useState(0);
 
   function handleDeath() {
     setLives((prev) => prev - 1);
@@ -84,11 +86,20 @@ export default function Pyramid() {
     setCubeCount(totalCubes);
   }, []);
 
+  // useEffect(() => {
+  //   setComponentKey((prev) => prev + 1);
+  // }, [currentLevel]);
+
   return (
     <>
       <group position={[0, layerCount * cubeSize * 0.5, 0]}>
         {[...Array(layerCount)].map((_, index) => {
-          return <CubeLevel key={index} level={index} />;
+          return (
+            <CubeLevel
+              key={`level-${currentLevel}-index-${index}`}
+              level={index}
+            />
+          );
         })}
       </group>
 

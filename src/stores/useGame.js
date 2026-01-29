@@ -51,6 +51,14 @@ export default create(
         });
       },
 
+      resetCubeHits: () => {
+        set((_) => {
+          return {
+            cubeHits: 0,
+          };
+        });
+      },
+
       /**
        * Score
        */

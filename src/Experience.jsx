@@ -19,6 +19,7 @@ export default function Experience() {
     layerCount,
     incrementCurrentLevel,
     incrementLayerCount,
+    resetCubeHits,
   } = useGame();
 
   useEffect(() => {
@@ -43,20 +44,19 @@ export default function Experience() {
       }, 300);
 
       setTimeout(() => {
+        resetCubeHits();
         incrementCurrentLevel();
 
         if (layerCount < 6) incrementLayerCount();
+
+        ready();
+        unpause();
 
         gsap.to(".level-won-container", {
           opacity: 0,
           duration: 0.5,
         });
       }, 3300);
-
-      setTimeout(() => {
-        ready();
-        unpause();
-      }, 5300);
     }
   }, [cubeHits]);
 
