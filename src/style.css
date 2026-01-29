@@ -20,6 +20,15 @@ body,
   padding: 0;
 }
 
+h1 {
+  color: white;
+  font-family: "Sixtyfour", monospace;
+  font-size: 3.6rem;
+  margin: 0 0 56px 0;
+  padding: 0;
+  font-weight: 400;
+}
+
 .interface-container,
 .game-over-container,
 .level-won-container {
@@ -33,11 +42,15 @@ body,
 
 .interface-container {
   padding: 64px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .extralives-container {
   display: flex;
   flex-direction: column;
+  width: 64px;
 }
 
 .extralife-image {
@@ -45,13 +58,14 @@ body,
   height: 64px;
 }
 
+.level-container,
 .score-container {
   color: white;
   font-family: "Sixtyfour", monospace;
-  font-size: 2rem;
+  font-size: 1.6rem;
   display: flex;
   gap: 24px;
-  margin-bottom: 64px;
+  margin-bottom: 40px;
 }
 
 .game-over-container,
