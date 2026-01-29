@@ -8,7 +8,7 @@ export default create(
       /**
        * Levels and layers
        */
-      currentLevel: 0,
+      currentLevel: 1,
       layerCount: 3,
       enemyInterval: 6000,
 

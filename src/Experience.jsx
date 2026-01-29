@@ -15,6 +15,7 @@ export default function Experience() {
     unpause,
     ready,
     score,
+    currentLevel,
     layerCount,
     incrementlayerCount,
   } = useGame();
@@ -23,6 +24,11 @@ export default function Experience() {
     const scoreValue = document.querySelector(".score-value");
     if (scoreValue) scoreValue.textContent = score;
   }, [score]);
+
+  useEffect(() => {
+    const levelValue = document.querySelector(".level-value");
+    if (levelValue) levelValue.textContent = currentLevel;
+  }, [currentLevel]);
 
   useEffect(() => {
     if (phase === "playing" && cubeHits >= cubeCount) {

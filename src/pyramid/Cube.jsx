@@ -29,21 +29,16 @@ export default function Cube({ size, position }) {
   };
 
   return (
-    <RigidBody type="fixed" colliders={false}>
+    <RigidBody type="fixed" colliders={false} position={position}>
       {/* Collider */}
       <CuboidCollider
         onCollisionEnter={handleHitCube}
         args={[0.25, 0.25, 0.25]}
-        position={position}
         friction={2}
       />
 
       {/* Cube mesh */}
-      <mesh
-        geometry={boxGeometry}
-        scale={[size, size, size]}
-        position={position}
-      >
+      <mesh geometry={boxGeometry} scale={[size, size, size]}>
         <meshStandardMaterial color={isTouched ? "#66ff66" : "#9966ff"} />
       </mesh>
     </RigidBody>
