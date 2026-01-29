@@ -15,8 +15,8 @@ export default function Experience() {
     unpause,
     ready,
     score,
-    levelCount,
-    incrementLevelCount,
+    layerCount,
+    incrementlayerCount,
   } = useGame();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Experience() {
       setTimeout(() => {
         unpause();
 
-        if (levelCount < 6) incrementLevelCount();
+        if (layerCount < 6) incrementlayerCount();
 
         gsap.to(".level-won-container", {
           opacity: 0,
