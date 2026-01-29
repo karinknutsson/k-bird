@@ -46,13 +46,11 @@ export function CubeLevel({ level }) {
 }
 
 export default function Pyramid() {
-  const { setCubeCount, ready, end, layerCount, phase, currentLevel } =
-    useGame();
+  const { setCubeCount, ready, end, layerCount, currentLevel } = useGame();
 
   const [lives, setLives] = useState(6);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [showBird, setShowBird] = useState(true);
-  const [componentKey, setComponentKey] = useState(0);
 
   function handleDeath() {
     setLives((prev) => prev - 1);
@@ -60,7 +58,6 @@ export default function Pyramid() {
 
     if (activeIndex === 0) {
       end();
-
       gsap.to(".game-over-container", { opacity: 1, duration: 0.5 });
     } else {
       ready();
@@ -84,11 +81,7 @@ export default function Pyramid() {
   useEffect(() => {
     const totalCubes = 2 * Math.pow(layerCount, 2) - 2 * layerCount + 1;
     setCubeCount(totalCubes);
-  }, []);
-
-  // useEffect(() => {
-  //   setComponentKey((prev) => prev + 1);
-  // }, [currentLevel]);
+  }, [layerCount]);
 
   return (
     <>

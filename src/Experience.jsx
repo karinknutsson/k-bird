@@ -62,8 +62,8 @@ export default function Experience() {
 
   return (
     <>
-      <Physics debug paused={phase === "pause"}>
-        {/* <Physics paused={phase === "pause"}> */}
+      {/* <Physics debug paused={phase === "pause"}> */}
+      <Physics paused={phase === "pause"}>
         <Lights />
         <Pyramid />
         {/* <Enemies /> */}
