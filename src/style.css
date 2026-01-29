@@ -22,7 +22,7 @@ body,
 
 .interface-container,
 .game-over-container,
-.game-won-container {
+.level-won-container {
   position: absolute;
   top: 0;
   left: 0;

@@ -11,7 +11,8 @@ export default function ActiveBird({ onDie }) {
 
   const birdDirection = useRef("downLeft");
   const [subscribeKeys] = useKeyboardControls();
-  let isJumping = true;
+  // let isJumping = true;
+  const isJumpingRef = useRef(true);
 
   const { start, pause, unpause, cameraPosition, moveCamera, phase } =
     useGame();
@@ -63,15 +64,9 @@ export default function ActiveBird({ onDie }) {
   cameraPositionRef.current = cameraPosition;
 
   // Lock / unlock jump
-  const setIsJumping = (value, ms = 800) => {
-    if (value) {
-      isJumping = true;
-    } else {
-      setTimeout(() => {
-        isJumping = false;
-      }, ms);
-    }
-  };
+  function setIsJumping(value) {
+    isJumpingRef.current = value;
+  }
 
   const quarterTurn = 0.035;
 
@@ -114,7 +109,6 @@ export default function ActiveBird({ onDie }) {
     }
 
     birdDirection.current = birdOnEdge ? "downLeft" : "upLeft";
-    setIsJumping(false, 950);
   };
 
   // Jump up right
@@ -156,7 +150,6 @@ export default function ActiveBird({ onDie }) {
     }
 
     birdDirection.current = birdOnEdge ? "downRight" : "upRight";
-    setIsJumping(false, 950);
   };
 
   // Jump down left
@@ -177,7 +170,6 @@ export default function ActiveBird({ onDie }) {
     }
 
     birdDirection.current = "downLeft";
-    setIsJumping(false);
   };
 
   // Jump down right
@@ -198,13 +190,10 @@ export default function ActiveBird({ onDie }) {
     }
 
     birdDirection.current = "downRight";
-    setIsJumping(false);
   };
 
   // Subscribe to jump keys
   useEffect(() => {
-    setIsJumping(false);
-
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
@@ -212,28 +201,28 @@ export default function ActiveBird({ onDie }) {
     const unsubscribeJumpDownLeft = subscribeKeys(
       (state) => state.downLeft,
       (value) => {
-        if (!isJumping && value) jumpDownLeft();
+        if (!isJumpingRef.current && value) jumpDownLeft();
       },
     );
 
     const unsubscribeJumpDownRight = subscribeKeys(
       (state) => state.downRight,
       (value) => {
-        if (!isJumping && value) jumpDownRight();
+        if (!isJumpingRef.current && value) jumpDownRight();
       },
     );
 
     const unsubscribeJumpUpRight = subscribeKeys(
       (state) => state.upRight,
       (value) => {
-        if (!isJumping && value) jumpUpRight();
+        if (!isJumpingRef.current && value) jumpUpRight();
       },
     );
 
     const unsubscribeJumpUpLeft = subscribeKeys(
       (state) => state.upLeft,
       (value) => {
-        if (!isJumping && value) jumpUpLeft();
+        if (!isJumpingRef.current && value) jumpUpLeft();
       },
     );
 
@@ -302,6 +291,8 @@ export default function ActiveBird({ onDie }) {
         }
         break;
     }
+
+    setIsJumping(false);
   };
 
   function resetBird() {

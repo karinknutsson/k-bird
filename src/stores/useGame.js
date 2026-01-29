@@ -9,7 +9,7 @@ export default create(
        * Levels
        */
       levelCount: 3,
-      enemyInterval: 4000,
+      enemyInterval: 6000,
 
       incrementLevelCount: () => {
         set((state) => {

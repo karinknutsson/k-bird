@@ -37,15 +37,18 @@ export default function Experience() {
 
       setTimeout(() => {
         unpause();
-        ready();
+
+        if (levelCount < 6) incrementLevelCount();
 
         gsap.to(".level-won-container", {
           opacity: 0,
           duration: 0.5,
         });
-
-        if (levelCount < 6) incrementLevelCount();
       }, 3300);
+
+      setTimeout(() => {
+        ready();
+      }, 5300);
     }
   }, [cubeHits]);
 
