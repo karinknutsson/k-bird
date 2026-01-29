@@ -65,10 +65,10 @@ export default create(
 
       score: 0,
 
-      incrementScore: () => {
+      incrementScore: (value) => {
         set((state) => {
           return {
-            score: state.score + 100,
+            score: state.score + value,
           };
         });
       },

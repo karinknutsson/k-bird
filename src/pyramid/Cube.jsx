@@ -23,7 +23,7 @@ export default function Cube({ size, position }) {
       !isTouched
     ) {
       setIsTouched(true);
-      incrementScore();
+      incrementScore(100);
       incrementCubeHits();
     }
   };

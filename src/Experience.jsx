@@ -20,6 +20,7 @@ export default function Experience() {
     incrementCurrentLevel,
     incrementLayerCount,
     resetCubeHits,
+    incrementScore,
   } = useGame();
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function Experience() {
     if (phase === "playing" && cubeHits >= cubeCount) {
       setTimeout(() => {
         pause();
+        incrementScore(200 * currentLevel);
 
         gsap.to(".level-won-container", {
           opacity: 1,
