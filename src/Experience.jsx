@@ -68,7 +68,7 @@ export default function Experience() {
       <Physics paused={phase === "pause"}>
         <Lights />
         <Pyramid />
-        {/* <Enemies /> */}
+        {layerCount > 2 && <Enemies />}
       </Physics>
     </>
   );

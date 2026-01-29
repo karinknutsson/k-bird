@@ -48,6 +48,12 @@ h1 {
   box-sizing: border-box;
 }
 
+/* .header-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+} */
+
 .extralives-container {
   display: flex;
   flex-direction: column;
