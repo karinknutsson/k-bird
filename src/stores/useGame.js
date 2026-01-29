@@ -6,15 +6,24 @@ export default create(
   subscribeWithSelector((set) => {
     return {
       /**
-       * Levels
+       * Levels and layers
        */
-      levelCount: 3,
+      currentLevel: 0,
+      layerCount: 3,
       enemyInterval: 6000,
 
-      incrementLevelCount: () => {
+      incrementCurrentLevel: () => {
         set((state) => {
           return {
-            levelCount: state.levelCount + 1,
+            currentLevel: state.currentLevel + 1,
+          };
+        });
+      },
+
+      incrementLayerCount: () => {
+        set((state) => {
+          return {
+            layerCount: state.layerCount + 1,
             enemyInterval: state.enemyInterval - 1000,
           };
         });
