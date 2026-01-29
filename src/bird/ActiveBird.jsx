@@ -68,6 +68,8 @@ export default function ActiveBird({ onDie }) {
     isJumpingRef.current = value;
   }
 
+  const smallJump = 1.2;
+  const bigJump = 2.4;
   const quarterTurn = 0.035;
 
   // Jump up left
@@ -88,14 +90,14 @@ export default function ActiveBird({ onDie }) {
     if (birdOnEdge) {
       birdRef.current.applyImpulse({
         x: movementRef.current.upLeft.x * 1.4,
-        y: 1.2,
+        y: smallJump,
         z: movementRef.current.upLeft.z * 1.4,
       });
     } else {
       // On non-edge cubes, jump upward
       birdRef.current.applyImpulse({
         x: movementRef.current.upLeft.x,
-        y: 2.4,
+        y: bigJump,
         z: movementRef.current.upLeft.z,
       });
     }
@@ -129,14 +131,14 @@ export default function ActiveBird({ onDie }) {
     if (birdOnEdge) {
       birdRef.current.applyImpulse({
         x: movementRef.current.upRight.x * 1.4,
-        y: 1.2,
+        y: smallJump,
         z: movementRef.current.upRight.z * 1.4,
       });
     } else {
       // On non-edge cubes, jump upward
       birdRef.current.applyImpulse({
         x: movementRef.current.upRight.x,
-        y: 2.4,
+        y: bigJump,
         z: movementRef.current.upRight.z,
       });
     }
@@ -157,7 +159,7 @@ export default function ActiveBird({ onDie }) {
     setIsJumping(true);
     birdRef.current.applyImpulse({
       x: movementRef.current.downLeft.x,
-      y: 1.2,
+      y: smallJump,
       z: movementRef.current.downLeft.z,
     });
 
@@ -177,7 +179,7 @@ export default function ActiveBird({ onDie }) {
     setIsJumping(true);
     birdRef.current.applyImpulse({
       x: movementRef.current.downRight.x,
-      y: 1.2,
+      y: smallJump,
       z: movementRef.current.downRight.z,
     });
 
@@ -239,6 +241,7 @@ export default function ActiveBird({ onDie }) {
    * Bird collision
    */
   const birdCollision = (e) => {
+    // Die on enemy egg collision
     if (e.rigidBodyObject.name === "enemyEgg") {
       pause();
 
@@ -249,6 +252,12 @@ export default function ActiveBird({ onDie }) {
       return;
     }
 
+    // Landing time
+    setTimeout(() => {
+      setIsJumping(false);
+    }, 100);
+
+    // Adjust position to be centered on cube
     const position = birdRef.current.translation();
 
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -261,6 +270,7 @@ export default function ActiveBird({ onDie }) {
       true,
     );
 
+    // Adjust camera position if jumping over edge
     switch (cameraPosition) {
       case 0:
         if (position.x < -0.3) {
@@ -291,8 +301,6 @@ export default function ActiveBird({ onDie }) {
         }
         break;
     }
-
-    setIsJumping(false);
   };
 
   function resetBird() {
