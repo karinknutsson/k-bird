@@ -17,7 +17,8 @@ export default function Experience() {
     score,
     currentLevel,
     layerCount,
-    incrementlayerCount,
+    incrementCurrentLevel,
+    incrementLayerCount,
   } = useGame();
 
   useEffect(() => {
@@ -42,9 +43,9 @@ export default function Experience() {
       }, 300);
 
       setTimeout(() => {
-        unpause();
+        incrementCurrentLevel();
 
-        if (layerCount < 6) incrementlayerCount();
+        if (layerCount < 6) incrementLayerCount();
 
         gsap.to(".level-won-container", {
           opacity: 0,
@@ -54,17 +55,18 @@ export default function Experience() {
 
       setTimeout(() => {
         ready();
+        unpause();
       }, 5300);
     }
   }, [cubeHits]);
 
   return (
     <>
-      {/* <Physics debug paused={phase === "pause"}> */}
-      <Physics paused={phase === "pause"}>
+      <Physics debug paused={phase === "pause"}>
+        {/* <Physics paused={phase === "pause"}> */}
         <Lights />
         <Pyramid />
-        <Enemies />
+        {/* <Enemies /> */}
       </Physics>
     </>
   );

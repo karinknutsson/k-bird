@@ -46,7 +46,6 @@ export function CubeLevel({ level }) {
 }
 
 export default function Pyramid() {
-  const pyramidRef = useRef();
   const { setCubeCount, ready, end, layerCount } = useGame();
 
   const [lives, setLives] = useState(6);
@@ -87,13 +86,11 @@ export default function Pyramid() {
 
   return (
     <>
-      <RigidBody ref={pyramidRef} colliders={false} mass={0.1}>
-        <group position={[0, layerCount * cubeSize * 0.5, 0]}>
-          {[...Array(layerCount)].map((_, index) => {
-            return <CubeLevel key={index} level={index} />;
-          })}
-        </group>
-      </RigidBody>
+      <group position={[0, layerCount * cubeSize * 0.5, 0]}>
+        {[...Array(layerCount)].map((_, index) => {
+          return <CubeLevel key={index} level={index} />;
+        })}
+      </group>
 
       {showBird && <ActiveBird onDie={handleDeath} />}
     </>

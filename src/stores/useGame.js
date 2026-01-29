@@ -9,7 +9,7 @@ export default create(
        * Levels and layers
        */
       currentLevel: 1,
-      layerCount: 3,
+      layerCount: 2,
       enemyInterval: 6000,
 
       incrementCurrentLevel: () => {
