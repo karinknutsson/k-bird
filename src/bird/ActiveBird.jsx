@@ -1,7 +1,7 @@
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, use } from "react";
 import useGame from "../stores/useGame";
 import BirdMesh from "./BirdMesh";
 import * as THREE from "three";
@@ -11,7 +11,6 @@ export default function ActiveBird({ onDie }) {
 
   const birdDirection = useRef("downLeft");
   const [subscribeKeys] = useKeyboardControls();
-  // let isJumping = true;
   const isJumpingRef = useRef(true);
 
   const { start, pause, unpause, cameraPosition, moveCamera, phase } =
@@ -64,15 +63,17 @@ export default function ActiveBird({ onDie }) {
   cameraPositionRef.current = cameraPosition;
 
   // Lock / unlock jump
-  function setIsJumping(value) {
+  function setIsJumpingRef(value) {
     isJumpingRef.current = value;
   }
 
+  const smallJump = 1.2;
+  const bigJump = 2.4;
   const quarterTurn = 0.035;
 
   // Jump up left
   const jumpUpLeft = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     const position = birdRef.current.translation();
 
     // Check if bird is on edge in current zone
@@ -88,14 +89,14 @@ export default function ActiveBird({ onDie }) {
     if (birdOnEdge) {
       birdRef.current.applyImpulse({
         x: movementRef.current.upLeft.x * 1.4,
-        y: 1.2,
+        y: smallJump,
         z: movementRef.current.upLeft.z * 1.4,
       });
     } else {
       // On non-edge cubes, jump upward
       birdRef.current.applyImpulse({
         x: movementRef.current.upLeft.x,
-        y: 2.4,
+        y: bigJump,
         z: movementRef.current.upLeft.z,
       });
     }
@@ -113,7 +114,7 @@ export default function ActiveBird({ onDie }) {
 
   // Jump up right
   const jumpUpRight = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     const position = birdRef.current.translation();
 
     // Check if bird is on edge in current zone
@@ -129,14 +130,14 @@ export default function ActiveBird({ onDie }) {
     if (birdOnEdge) {
       birdRef.current.applyImpulse({
         x: movementRef.current.upRight.x * 1.4,
-        y: 1.2,
+        y: smallJump,
         z: movementRef.current.upRight.z * 1.4,
       });
     } else {
       // On non-edge cubes, jump upward
       birdRef.current.applyImpulse({
         x: movementRef.current.upRight.x,
-        y: 2.4,
+        y: bigJump,
         z: movementRef.current.upRight.z,
       });
     }
@@ -154,10 +155,10 @@ export default function ActiveBird({ onDie }) {
 
   // Jump down left
   const jumpDownLeft = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     birdRef.current.applyImpulse({
       x: movementRef.current.downLeft.x,
-      y: 1.2,
+      y: smallJump,
       z: movementRef.current.downLeft.z,
     });
 
@@ -174,10 +175,10 @@ export default function ActiveBird({ onDie }) {
 
   // Jump down right
   const jumpDownRight = () => {
-    setIsJumping(true);
+    setIsJumpingRef(true);
     birdRef.current.applyImpulse({
       x: movementRef.current.downRight.x,
-      y: 1.2,
+      y: smallJump,
       z: movementRef.current.downRight.z,
     });
 
@@ -192,6 +193,34 @@ export default function ActiveBird({ onDie }) {
     birdDirection.current = "downRight";
   };
 
+  const queuedJumpRef = useRef(null);
+
+  // Queue jumps in case key is pressed before landing
+  function queueJump(jump) {
+    queuedJumpRef.current = jump;
+  }
+
+  useEffect(() => {
+    if (!isJumpingRef.current) {
+      switch (queuedJumpRef.current) {
+        case "downLeft":
+          jumpDownLeft();
+          break;
+        case "downRight":
+          jumpDownRight();
+          break;
+        case "upRight":
+          jumpUpRight();
+          break;
+        case "upLeft":
+          jumpUpLeft();
+          break;
+      }
+
+      queuedJumpRef.current = null;
+    }
+  }, [isJumpingRef.current]);
+
   // Subscribe to jump keys
   useEffect(() => {
     const unsubscribeAny = subscribeKeys(() => {
@@ -201,28 +230,52 @@ export default function ActiveBird({ onDie }) {
     const unsubscribeJumpDownLeft = subscribeKeys(
       (state) => state.downLeft,
       (value) => {
-        if (!isJumpingRef.current && value) jumpDownLeft();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("downLeft");
+        } else {
+          jumpDownLeft();
+        }
       },
     );
 
     const unsubscribeJumpDownRight = subscribeKeys(
       (state) => state.downRight,
       (value) => {
-        if (!isJumpingRef.current && value) jumpDownRight();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("downRight");
+        } else {
+          jumpDownRight();
+        }
       },
     );
 
     const unsubscribeJumpUpRight = subscribeKeys(
       (state) => state.upRight,
       (value) => {
-        if (!isJumpingRef.current && value) jumpUpRight();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("upRight");
+        } else {
+          jumpUpRight();
+        }
       },
     );
 
     const unsubscribeJumpUpLeft = subscribeKeys(
       (state) => state.upLeft,
       (value) => {
-        if (!isJumpingRef.current && value) jumpUpLeft();
+        if (!value) return;
+
+        if (isJumpingRef.current) {
+          queueJump("upLeft");
+        } else {
+          jumpUpLeft();
+        }
       },
     );
 
@@ -239,6 +292,7 @@ export default function ActiveBird({ onDie }) {
    * Bird collision
    */
   const birdCollision = (e) => {
+    // Die on enemy egg collision
     if (e.rigidBodyObject.name === "enemyEgg") {
       pause();
 
@@ -249,6 +303,12 @@ export default function ActiveBird({ onDie }) {
       return;
     }
 
+    // Landing time
+    setTimeout(() => {
+      setIsJumpingRef(false);
+    }, 100);
+
+    // Adjust position to be centered on cube
     const position = birdRef.current.translation();
 
     birdRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -261,6 +321,7 @@ export default function ActiveBird({ onDie }) {
       true,
     );
 
+    // Adjust camera position if jumping over edge
     switch (cameraPosition) {
       case 0:
         if (position.x < -0.3) {
@@ -291,8 +352,6 @@ export default function ActiveBird({ onDie }) {
         }
         break;
     }
-
-    setIsJumping(false);
   };
 
   function resetBird() {
