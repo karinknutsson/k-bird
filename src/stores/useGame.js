@@ -9,8 +9,16 @@ export default create(
        * Levels and layers
        */
       currentLevel: 1,
-      layerCount: 2,
+      layerCount: 1,
       enemyInterval: 6000,
+
+      setEnemyInterval: (value) => {
+        set((_) => {
+          return {
+            enemyInterval: value,
+          };
+        });
+      },
 
       incrementCurrentLevel: () => {
         set((state) => {
@@ -24,7 +32,6 @@ export default create(
         set((state) => {
           return {
             layerCount: state.layerCount + 1,
-            enemyInterval: state.enemyInterval - 1000,
           };
         });
       },

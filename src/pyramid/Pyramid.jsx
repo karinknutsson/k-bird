@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Cube from "./Cube";
 import useGame from "../stores/useGame";
-import { RigidBody } from "@react-three/rapier";
 import ActiveBird from "../bird/ActiveBird";
 import gsap from "gsap";
 
@@ -48,7 +47,7 @@ export function CubeLevel({ level }) {
 export default function Pyramid() {
   const { setCubeCount, ready, end, layerCount, currentLevel } = useGame();
 
-  const [lives, setLives] = useState(6);
+  const [lives, setLives] = useState(4);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [showBird, setShowBird] = useState(true);
 

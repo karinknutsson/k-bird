@@ -12,19 +12,61 @@
     <script type="module" src="./index.jsx"></script>
 
     <div class="interface-container">
-      <div>
-        <div class="title-container"><h1>K·BIRD</h1></div>
-        <div class="level-container">
-          <div class="level-label">LEVEL:</div>
-          <div class="level-value">1</div>
+      <div class="header-container">
+        <h1>K·BIRD</h1>
+        <div class="extralives-container"></div>
+      </div>
+      <div class="info-container">
+        <div class="level-score-container">
+          <div class="level-container">
+            <div class="level-label">LEVEL</div>
+            <div class="level-value">1</div>
+          </div>
+          <div class="score-container">
+            <div class="score-label">SCORE:</div>
+            <div class="score-value">0</div>
+          </div>
         </div>
-        <div class="score-container">
-          <div class="score-label">SCORE:</div>
-          <div class="score-value">0</div>
+        <div>
+          <div class="instructions-container">
+            <div class="instructions-sidebar">
+              <div class="instruction-wrapper">
+                <div class="instruction-text-wrapper">Numpad 7<br />or 'Q'</div>
+                <div class="arrow-image-wrapper">
+                  <img class="arrow-image" src="./arrow-insert.png" />
+                </div>
+              </div>
+
+              <div class="instruction-wrapper">
+                <div class="instruction-text-wrapper">Numpad 1<br />or 'Z'</div>
+                <div class="arrow-image-wrapper down-left">
+                  <img class="arrow-image" src="./arrow-insert.png" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <img src="./bird-on-cube.png" class="instructions-bird" />
+            </div>
+
+            <div class="instructions-sidebar">
+              <div class="instruction-wrapper">
+                <div class="arrow-image-wrapper">
+                  <img class="arrow-image up-right" src="./arrow-insert.png" />
+                </div>
+                <div class="instruction-text-wrapper">Numpad 9<br />or 'E'</div>
+              </div>
+
+              <div class="instruction-wrapper">
+                <div class="arrow-image-wrapper down-right">
+                  <img class="arrow-image" src="./arrow-insert.png" />
+                </div>
+                <div class="instruction-text-wrapper">Numpad 3<br />or 'C'</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="extralives-container"></div>
     </div>
 
     <div class="game-over-container">

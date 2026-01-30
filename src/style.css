@@ -7,6 +7,15 @@
   font-display: block;
 }
 
+@font-face {
+  font-family: "VT323";
+  src:
+    url("/VT323.woff2") format("woff2"),
+    url("/VT323.woff") format("woff");
+  font-style: normal;
+  font-display: block;
+}
+
 html,
 body,
 #root {
@@ -23,7 +32,7 @@ body,
 h1 {
   color: white;
   font-family: "Sixtyfour", monospace;
-  font-size: 3.6rem;
+  font-size: 4.2rem;
   margin: 0 0 56px 0;
   padding: 0;
   font-weight: 400;
@@ -44,29 +53,110 @@ h1 {
 .interface-container {
   padding: 64px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
 }
 
+.header-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .extralives-container {
   display: flex;
-  flex-direction: column;
-  width: 64px;
+  height: 64px;
+  gap: 24px;
 }
 
 .extralife-image {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
+}
+
+.level-score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 40px;
 }
 
 .level-container,
 .score-container {
   color: white;
   font-family: "Sixtyfour", monospace;
+  display: flex;
+  gap: 16px;
+}
+
+.level-container {
   font-size: 1.6rem;
+}
+
+.score-container {
+  font-size: 2.4rem;
+}
+
+.info-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.instructions-container {
   display: flex;
   gap: 24px;
-  margin-bottom: 40px;
+}
+
+.instructions-bird {
+  width: 80px;
+  height: auto;
+}
+
+.instructions-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.down-left {
+  transform: rotate(-90deg);
+}
+
+.down-right {
+  transform: rotate(180deg);
+}
+
+.up-right {
+  transform: rotate(90deg);
+}
+
+.instruction-wrapper {
+  color: white;
+  font-family: "VT323", monospace;
+  font-size: 1.6rem;
+  text-align: center;
+  display: flex;
+  gap: 16px;
+}
+
+.arrow-image-wrapper {
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-image {
+  width: 40px;
+  height: 40px;
 }
 
 .game-over-container,
