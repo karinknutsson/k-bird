@@ -1,12 +1,15 @@
 import { Physics } from "@react-three/rapier";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import Lights from "./Lights.jsx";
 import Pyramid from "./pyramid/Pyramid.jsx";
 import Enemies from "./enemies/Enemies.jsx";
 import useGame from "./stores/useGame.js";
 import gsap from "gsap";
+import { useKeyboardControls } from "@react-three/drei";
 
 export default function Experience() {
+  const [subscribeKeys] = useKeyboardControls();
+
   const {
     phase,
     cubeCount,
@@ -23,7 +26,31 @@ export default function Experience() {
     incrementScore,
     enemyInterval,
     setEnemyInterval,
+    resetGame,
+    restartCount,
+    incrementRestartCount,
   } = useGame();
+
+  function restartGame() {
+    resetGame();
+    incrementRestartCount();
+    ready();
+    gsap.to(".game-over-container", { opacity: 0, duration: 0.5 });
+  }
+
+  useEffect(() => {
+    const unsubscribeRestart = subscribeKeys(
+      (state) => state.restart,
+      (value) => {
+        if (!value) return;
+
+        if (phase === "ended") restartGame();
+      },
+    );
+    return () => {
+      unsubscribeRestart();
+    };
+  }, [phase]);
 
   useEffect(() => {
     const scoreValue = document.querySelector(".score-value");
@@ -50,7 +77,7 @@ export default function Experience() {
       setTimeout(() => {
         resetCubeHits();
         incrementCurrentLevel();
-        setEnemyInterval(enemyInterval * 0.9);
+        if (enemyInterval > 3000) setEnemyInterval(enemyInterval * 0.9);
 
         if (layerCount < 6) incrementLayerCount();
 
@@ -70,7 +97,7 @@ export default function Experience() {
       {/* <Physics debug paused={phase === "pause"}> */}
       <Physics paused={phase === "pause"}>
         <Lights />
-        <Pyramid />
+        <Pyramid key={restartCount} />
         {layerCount > 2 && <Enemies />}
       </Physics>
     </>

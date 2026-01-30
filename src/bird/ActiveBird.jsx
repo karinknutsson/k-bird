@@ -223,14 +223,12 @@ export default function ActiveBird({ onDie }) {
 
   // Subscribe to jump keys
   useEffect(() => {
-    const unsubscribeAny = subscribeKeys(() => {
-      start();
-    });
-
     const unsubscribeJumpDownLeft = subscribeKeys(
       (state) => state.downLeft,
       (value) => {
         if (!value) return;
+
+        start();
 
         if (isJumpingRef.current) {
           queueJump("downLeft");
@@ -245,6 +243,8 @@ export default function ActiveBird({ onDie }) {
       (value) => {
         if (!value) return;
 
+        start();
+
         if (isJumpingRef.current) {
           queueJump("downRight");
         } else {
@@ -257,6 +257,8 @@ export default function ActiveBird({ onDie }) {
       (state) => state.upRight,
       (value) => {
         if (!value) return;
+
+        start();
 
         if (isJumpingRef.current) {
           queueJump("upRight");
@@ -271,6 +273,8 @@ export default function ActiveBird({ onDie }) {
       (value) => {
         if (!value) return;
 
+        start();
+
         if (isJumpingRef.current) {
           queueJump("upLeft");
         } else {
@@ -280,7 +284,6 @@ export default function ActiveBird({ onDie }) {
     );
 
     return () => {
-      unsubscribeAny();
       unsubscribeJumpDownLeft();
       unsubscribeJumpDownRight();
       unsubscribeJumpUpRight();

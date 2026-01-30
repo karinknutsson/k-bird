@@ -11,6 +11,24 @@ export default create(
       currentLevel: 1,
       layerCount: 2,
       enemyInterval: 6000,
+      livesCount: 4,
+      restartCount: 0,
+
+      incrementRestartCount: () =>
+        set((state) => ({ restartCount: state.restartCount + 1 })),
+
+      resetGame: () => {
+        set((_) => {
+          return {
+            currentLevel: 1,
+            layerCount: 2,
+            enemyInterval: 6000,
+            cubeHits: 0,
+            score: 0,
+            livesCount: 4,
+          };
+        });
+      },
 
       setEnemyInterval: (value) => {
         set((_) => {
@@ -136,23 +154,21 @@ export default create(
 
       start: () => {
         set((state) => {
-          if (state.phase === "ready")
+          if (state.phase === "ready") {
             return {
               phase: "playing",
             };
+          }
 
           return {};
         });
       },
 
       ready: () => {
-        set((state) => {
-          if (state.phase === "playing")
-            return {
-              phase: "ready",
-            };
-
-          return {};
+        set((_) => {
+          return {
+            phase: "ready",
+          };
         });
       },
 
@@ -184,13 +200,10 @@ export default create(
       },
 
       end: () => {
-        set((state) => {
-          if (state.phase === "playing")
-            return {
-              phase: "ended",
-            };
-
-          return {};
+        set((_) => {
+          return {
+            phase: "ended",
+          };
         });
       },
     };
