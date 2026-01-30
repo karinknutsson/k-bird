@@ -47,7 +47,7 @@ export function CubeLevel({ level }) {
 export default function Pyramid() {
   const { setCubeCount, ready, end, layerCount, currentLevel } = useGame();
 
-  const [lives, setLives] = useState(4);
+  const [lives, setLives] = useState(1);
   const [activeIndex, setActiveIndex] = useState(lives - 1);
   const [showBird, setShowBird] = useState(true);
 
