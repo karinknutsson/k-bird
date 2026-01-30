@@ -11,6 +11,11 @@ export default create(
       currentLevel: 1,
       layerCount: 2,
       enemyInterval: 6000,
+      livesCount: 2,
+      restartCount: 0,
+
+      incrementRestartCount: () =>
+        set((state) => ({ restartCount: state.restartCount + 1 })),
 
       resetGame: () => {
         set((_) => {
@@ -20,6 +25,7 @@ export default create(
             enemyInterval: 6000,
             cubeHits: 0,
             score: 0,
+            livesCount: 2,
           };
         });
       },
@@ -159,7 +165,6 @@ export default create(
 
       ready: () => {
         set((state) => {
-          console.log("ready");
           if (state.phase === "playing")
             return {
               phase: "ready",
@@ -198,7 +203,6 @@ export default create(
 
       end: () => {
         set((_) => {
-          console.log("ended");
           return {
             phase: "ended",
           };

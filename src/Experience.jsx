@@ -27,10 +27,13 @@ export default function Experience() {
     enemyInterval,
     setEnemyInterval,
     resetGame,
+    restartCount,
+    incrementRestartCount,
   } = useGame();
 
   function restartGame() {
     resetGame();
+    incrementRestartCount();
     ready();
     gsap.to(".game-over-container", { opacity: 0, duration: 0.5 });
   }
@@ -94,7 +97,7 @@ export default function Experience() {
       {/* <Physics debug paused={phase === "pause"}> */}
       <Physics paused={phase === "pause"}>
         <Lights />
-        <Pyramid />
+        <Pyramid key={restartCount} />
         {layerCount > 2 && <Enemies />}
       </Physics>
     </>
