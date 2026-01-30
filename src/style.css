@@ -135,6 +135,13 @@ h1 {
   transform: rotate(90deg);
 }
 
+.restart-text-wrapper {
+  color: white;
+  font-family: "VT323", monospace;
+  font-size: 2.4rem;
+  display: flex;
+}
+
 .instruction-wrapper {
   color: white;
   font-family: "VT323", monospace;
@@ -164,13 +171,18 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   opacity: 0;
+}
+
+.game-over-container {
+  flex-direction: column;
+  gap: 32px;
 }
 
 .game-over-text-wrapper,
 .level-won-text-wrapper {
   color: white;
   font-family: "Sixtyfour", monospace;
-  font-size: 5rem;
+  font-size: 3.6rem;
 }
