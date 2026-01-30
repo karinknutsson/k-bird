@@ -154,23 +154,21 @@ export default create(
 
       start: () => {
         set((state) => {
-          if (state.phase === "ready")
-            return {
-              phase: "playing",
-            };
+          if (state.phase === "ready") console.log("start playing");
+          return {
+            phase: "playing",
+          };
 
           return {};
         });
       },
 
       ready: () => {
-        set((state) => {
-          if (state.phase === "playing")
-            return {
-              phase: "ready",
-            };
-
-          return {};
+        set((_) => {
+          console.log("ready");
+          return {
+            phase: "ready",
+          };
         });
       },
 
