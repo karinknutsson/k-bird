@@ -11,7 +11,7 @@ export default create(
       currentLevel: 1,
       layerCount: 2,
       enemyInterval: 6000,
-      livesCount: 3,
+      livesCount: 4,
       restartCount: 0,
 
       incrementRestartCount: () =>
@@ -25,7 +25,7 @@ export default create(
             enemyInterval: 6000,
             cubeHits: 0,
             score: 0,
-            livesCount: 3,
+            livesCount: 4,
           };
         });
       },
