@@ -25,7 +25,7 @@ export default create(
             enemyInterval: 6000,
             cubeHits: 0,
             score: 0,
-            livesCount: 2,
+            livesCount: 4,
           };
         });
       },
