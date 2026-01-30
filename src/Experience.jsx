@@ -21,6 +21,8 @@ export default function Experience() {
     incrementLayerCount,
     resetCubeHits,
     incrementScore,
+    enemyInterval,
+    setEnemyInterval,
   } = useGame();
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function Experience() {
       setTimeout(() => {
         resetCubeHits();
         incrementCurrentLevel();
+        setEnemyInterval(enemyInterval * 0.9);
 
         if (layerCount < 6) incrementLayerCount();
 

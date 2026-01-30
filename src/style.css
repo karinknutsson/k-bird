@@ -7,6 +7,15 @@
   font-display: block;
 }
 
+@font-face {
+  font-family: "VT323";
+  src:
+    url("/VT323.woff2") format("woff2"),
+    url("/VT323.woff") format("woff");
+  font-style: normal;
+  font-display: block;
+}
+
 html,
 body,
 #root {
@@ -44,6 +53,8 @@ h1 {
 .interface-container {
   padding: 64px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
 }
@@ -69,10 +80,57 @@ h1 {
 .score-container {
   color: white;
   font-family: "Sixtyfour", monospace;
-  font-size: 1.6rem;
+  font-size: 2.4rem;
   display: flex;
-  gap: 24px;
+  gap: 16px;
   margin-bottom: 40px;
+}
+
+.info-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.instructions-container {
+  display: flex;
+  gap: 16px;
+}
+
+.instructions-bird {
+  width: 100px;
+  height: auto;
+}
+
+.instructions-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.instruction-wrapper {
+  color: white;
+  font-family: "VT323", monospace;
+  font-size: 1.6rem;
+  text-align: center;
+  display: flex;
+  gap: 16px;
+}
+
+.arrow-image-wrapper {
+  width: 48px;
+  height: 48px;
+  border: 2px solid white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-image {
+  width: 40px;
+  height: 40px;
 }
 
 .game-over-container,
