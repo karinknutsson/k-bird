@@ -19,18 +19,10 @@ root.render(
     >
       <Canvas
         camera={{
-          // zoom: 1.2,
           fov: 45,
           near: 0.1,
           far: 200,
-
-          // Game view
           position: [5, 6, 5],
-
-          // Top view
-          // position: [0, 8, 0],
-          // Front view
-          // position: [0, 1.5, 5],
         }}
       >
         {/* <Canvas> */}
