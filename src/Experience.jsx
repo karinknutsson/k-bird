@@ -77,7 +77,7 @@ export default function Experience() {
       setTimeout(() => {
         resetCubeHits();
         incrementCurrentLevel();
-        setEnemyInterval(enemyInterval * 0.9);
+        if (enemyInterval > 3000) setEnemyInterval(enemyInterval * 0.9);
 
         if (layerCount < 6) incrementLayerCount();
 
